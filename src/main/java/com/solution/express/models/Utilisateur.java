@@ -1,4 +1,9 @@
+package com.solution.express.models;
+
 import javax.annotation.processing.Generated;
+
+import jakarta.persistence.Entity;
+import lombok.Data;
 
 @Entity
 @Data
