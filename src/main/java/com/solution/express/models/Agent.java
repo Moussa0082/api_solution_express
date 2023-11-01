@@ -43,6 +43,7 @@ public class Agent {
     private Banque  banque;
 
     //liaison demande à agent plusieurs à plusieurs
-    @ManyToMany(mappedBy="agent")
+    @ManyToMany
+    // (mappedBy="agent")
     private List<Demande> demande;
 }

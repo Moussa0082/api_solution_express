@@ -67,6 +67,7 @@ public class Demande {
 
     //Liaison agent à la demande pour voir l'agent qui s'occuper de la demande
     @ManyToMany
+    // (mappedBy = "demande")
     private List<Agent> agent;
 
     //Lier l'id de l'utilisateur à la demande pour voir l'utilisateur qui a effectué la demande

@@ -49,12 +49,14 @@ public class Cotisation {
     private Date dateFin;
 
     //Liaison User aux cotisation
-    @ManyToMany(mappedBy="cotisation")
+    @ManyToMany
+    // (mappedBy="cotisation")
     private List<Utilisateur> utilisateur;
 
 
     //Pour afficher la liste des paiements liée à la cotisation
-     @OneToMany(mappedBy="cotisation")
+     @OneToMany
+    //  (mappedBy="cotisation")
     // @JsonIgnoreProperties(value = {"utiliateur"})
     private  List<Paiement> paiement;
     

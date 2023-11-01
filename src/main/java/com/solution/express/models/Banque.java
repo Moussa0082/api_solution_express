@@ -36,12 +36,14 @@ public class Banque {
     private  List<Agent> agents;
     
     //Liste des types de demande de la banque
-    @OneToMany(mappedBy="banque" ,cascade = CascadeType.ALL)
+    @OneToMany
+    // (mappedBy="banque" ,cascade = CascadeType.ALL)
     // @JsonIgnoreProperties(value = {"admin"})
     private  List<TypeBanque> typeBanque;
 
     //Liaison admin à banque
-    @OneToOne(mappedBy="banque")
+    @OneToOne
+    // (mappedBy="banque")
     private Admin admin;
 
     @ManyToOne

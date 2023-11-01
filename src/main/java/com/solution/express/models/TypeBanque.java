@@ -39,7 +39,8 @@ public class TypeBanque {
     private Banque banque;
 
     //Liste des demandes dans le type
-    @OneToMany(mappedBy = "typeBanque" ,cascade = CascadeType.ALL)
+    @OneToMany
+    // (mappedBy = "typeBanque" ,cascade = CascadeType.ALL)
     // @JsonIgnoreProperties(value = {"admin"})
     private  List<Demande> demande;
 

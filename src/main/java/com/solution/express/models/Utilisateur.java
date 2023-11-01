@@ -28,25 +28,30 @@ public class Utilisateur {
 
         
    //Liaison demande à l'utilisateur pour voir la liste des demandes effectuer par le user
-    @OneToMany(mappedBy="utilisateur")
+    @OneToMany
+    // (mappedBy="utilisateur")
     // @JsonIgnoreProperties(value = {"utiliateur"})
     private  List<Demande> demande;
     
     //Liaison le paiement à l'utilisateur pour voir la liste des paiements effectuer par le user
-     @OneToMany(mappedBy="utilisateur")
+     @OneToMany
+    //  (mappedBy="utilisateur")
      // @JsonIgnoreProperties(value = {"utiliateur"})
      private  List<Paiement> paiement;
 
     //Liaison cotisation aux user
-    @ManyToMany(mappedBy="utilisateur")
+    @ManyToMany
+    // (mappedBy="utilisateur")
     private List<Cotisation> cotisation;
   
     //Pour afficher la liste des raports elaborer par un user specifique
-    @OneToMany(mappedBy="utilisateur")
+    @OneToMany
+    // (mappedBy="utilisateur")
     private List<Rapport> rapport;
     
     //Pour afficher la liste des evenements planifier par un user specifique
-    @OneToMany(mappedBy="utilisateur")
+    @OneToMany
+    //  (mappedBy="utilisateur")
     private List<Evenement> evenement;
 
     

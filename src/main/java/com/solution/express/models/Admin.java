@@ -2,18 +2,11 @@ package com.solution.express.models;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -40,11 +33,12 @@ public class Admin {
     private String motDePasse;
 
     //Pour voir la liste des agents ajoutés par l'admin
-    @OneToMany(mappedBy="admin")
+    @OneToMany
+    // (mappedBy="admin")
     // @JsonIgnoreProperties(value = {"admin"})
     private  List<Agent> agent;
 
-    //Liaison super admin à admin
+    //Liaison superadmin à admin
     @ManyToOne
     private SuperAdmin superAdmin;
 
