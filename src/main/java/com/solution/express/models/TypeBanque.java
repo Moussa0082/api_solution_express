@@ -1,7 +1,7 @@
 package com.solution.express.models;
 
+
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -10,39 +10,39 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Entity
 @Data
-public class Agent {
+public class TypeBanque {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private int idAgent;
+    private int idTypeBanque;
 
     @Column(nullable = false)
     private String nom;
 
     @Column(nullable = false)
-    private String prenom;
-
-    @Column(nullable = false)
-    private String email;
-
-    @Column(nullable = false)
-    private String motDePasse;
-
-    //Lier l'admin à l'agent pour voir l'admin qui la ajouter
-    @ManyToOne
-    private Admin  admin;
+    private String description;
     
-    //Lier la banque à l'agent pour voir la banque dans lequel l'agent est affecter
-    @ManyToOne
-    private Banque  banque;
+    private String image;
 
-    //liaison demande à agent plusieurs à plusieurs
-    @ManyToMany(mappedBy="agent")
-    private List<Demande> demande;
+    //Joindre le superadmin à la baqnque l'id du super admin pour connaitre le super admin qui l'a crée
+    @ManyToOne
+    private SuperAdmin superAdmin;
+    
+    //Joindre la banque a son type
+    @ManyToOne
+    private Banque banque;
+
+    //Liste des demandes dans le type
+    @OneToMany(mappedBy = "typeBanque" ,cascade = CascadeType.ALL)
+    // @JsonIgnoreProperties(value = {"admin"})
+    private  List<Demande> demande;
+
+    
+   
 }
