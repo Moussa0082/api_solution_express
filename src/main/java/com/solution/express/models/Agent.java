@@ -35,15 +35,15 @@ public class Agent {
     private String motDePasse;
 
     //Lier l'admin à l'agent pour voir l'admin qui la ajouter
-    @ManyToOne
-    private Admin  admin;
+    // @ManyToOne
+    // private Admin  admin;
     
-    //Lier la banque à l'agent pour voir la banque dans lequel l'agent est affecter
-    @ManyToOne
-    private Banque  banque;
+    // //Lier la banque à l'agent pour voir la banque dans lequel l'agent est affecter
+    // @ManyToOne
+    // private Banque  banque;
 
-    //liaison demande à agent plusieurs à plusieurs
-    @ManyToMany
-    // (mappedBy="agent")
-    private List<Demande> demande;
+    // //liaison demande à agent plusieurs à plusieurs
+    // @ManyToMany
+    // // (mappedBy="agent")
+    // private List<Demande> demande;
 }

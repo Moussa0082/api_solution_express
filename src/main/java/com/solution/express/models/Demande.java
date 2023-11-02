@@ -62,16 +62,16 @@ public class Demande {
     private String etatCivil;
 
     //Lier la demande faite à un type specifique
-    @ManyToOne
-    private TypeBanque typeBanque;
+    // @ManyToOne
+    // private TypeBanque typeBanque;
 
-    //Liaison agent à la demande pour voir l'agent qui s'occuper de la demande
-    @ManyToMany
-    // (mappedBy = "demande")
-    private List<Agent> agent;
+    // //Liaison agent à la demande pour voir l'agent qui s'occuper de la demande
+    // @ManyToMany
+    // // (mappedBy = "demande")
+    // private List<Agent> agent;
 
-    //Lier l'id de l'utilisateur à la demande pour voir l'utilisateur qui a effectué la demande
-    @ManyToOne
-    private Utilisateur utilisateur;
+    // //Lier l'id de l'utilisateur à la demande pour voir l'utilisateur qui a effectué la demande
+    // @ManyToOne
+    // private Utilisateur utilisateur;
 
 }

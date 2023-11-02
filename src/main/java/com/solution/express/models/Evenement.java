@@ -39,9 +39,9 @@ public class Evenement {
     private Date heureEvenement;
 
 
-    //Liaison du user au rapport pour voir le user qui a elaborer le rapport
-    @ManyToOne
-    private Utilisateur utilisateur;
+    // //Liaison du user au rapport pour voir le user qui a elaborer le rapport
+    // @ManyToOne
+    // private Utilisateur utilisateur;
 
     
 }

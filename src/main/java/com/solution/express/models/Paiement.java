@@ -31,12 +31,12 @@ public class Paiement {
     private Date heurePaiement;
 
     //Liée l'id de la cotisation au paiement pour voir la cotisation liée à un paiement specifique
-    @ManyToOne
-    private Cotisation cotisation;
+    // @ManyToOne
+    // private Cotisation cotisation;
     
-    //Liaison du user au paiement pour voir le user qui faire le paiement
-    @ManyToOne
-    private Utilisateur utilisateur;
+    // //Liaison du user au paiement pour voir le user qui faire le paiement
+    // @ManyToOne
+    // private Utilisateur utilisateur;
 
     
 

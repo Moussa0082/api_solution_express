@@ -37,7 +37,7 @@ public class Rapport {
     private String message;
 
     //Liaison du user au rapport pour voir le user qui a elaborer le rapport
-    @ManyToOne
-    private Utilisateur utilisateur;
+    // @ManyToOne
+    // private Utilisateur utilisateur;
 
 }

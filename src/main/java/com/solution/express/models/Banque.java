@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -30,23 +31,23 @@ public class Banque {
     @Column(nullable = false)
     private String image;
 
-    //Liste des agents de la banque
-    @OneToMany(mappedBy="banque" ,cascade = CascadeType.ALL)
-    // @JsonIgnoreProperties(value = {"admin"})
-    private  List<Agent> agents;
+    // //Liste des agents de la banque
+    // @OneToMany(mappedBy="banque" ,cascade = CascadeType.ALL)
+    // // @JsonIgnoreProperties(value = {"admin"})
+    // private  List<Agent> agents;
     
-    //Liste des types de demande de la banque
-    @OneToMany
-    // (mappedBy="banque" ,cascade = CascadeType.ALL)
-    // @JsonIgnoreProperties(value = {"admin"})
-    private  List<TypeBanque> typeBanque;
+    // //Liste des types de demande de la banque
+    // @OneToMany
+    // // (mappedBy="banque" ,cascade = CascadeType.ALL)
+    // // @JsonIgnoreProperties(value = {"admin"})
+    // private  List<TypeBanque> typeBanque;
 
-    //Liaison admin à banque
-    @OneToOne
-    // (mappedBy="banque")
-    private Admin admin;
+    // //Liaison admin à banque
+    // @OneToOne
+    // @JoinColumn(name = "id_admin")
+    // private Admin admin;
 
-    @ManyToOne
-    private SuperAdmin superAdmin;
+    // @ManyToOne
+    // private SuperAdmin superAdmin;
     
 }

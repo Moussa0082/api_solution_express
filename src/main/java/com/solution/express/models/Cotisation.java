@@ -48,17 +48,17 @@ public class Cotisation {
     @Column(nullable = true)
     private Date dateFin;
 
-    //Liaison User aux cotisation
-    @ManyToMany
-    // (mappedBy="cotisation")
-    private List<Utilisateur> utilisateur;
+    // //Liaison User aux cotisation
+    // @ManyToMany
+    // // (mappedBy="cotisation")
+    // private List<Utilisateur> utilisateur;
 
 
-    //Pour afficher la liste des paiements liée à la cotisation
-     @OneToMany
-    //  (mappedBy="cotisation")
-    // @JsonIgnoreProperties(value = {"utiliateur"})
-    private  List<Paiement> paiement;
+    // //Pour afficher la liste des paiements liée à la cotisation
+    //  @OneToMany
+    // //  (mappedBy="cotisation")
+    // // @JsonIgnoreProperties(value = {"utiliateur"})
+    // private  List<Paiement> paiement;
     
     
 }

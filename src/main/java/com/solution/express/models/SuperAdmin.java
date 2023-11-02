@@ -33,22 +33,22 @@ public class SuperAdmin {
     @Column(nullable = false)
     private String motDePasse;
 
-    @OneToMany
-    // (mappedBy = "superAdmin")
-    // @JsonIgnoreProperties(value = {"admin"})
-    private  List<Admin> admin;
+//     @OneToMany
+//     // (mappedBy = "superAdmin")
+//     // @JsonIgnoreProperties(value = {"admin"})
+//     private  List<Admin> admin;
     
-    //Liaison super admin à banque pour voir la liste des banque ajoutés par le super admin
-    @OneToMany
-    // (mappedBy = "superAdmin")
-   // @JsonIgnoreProperties(value = {"admin"})
-    private  List<Banque> banque;
+//     //Liaison super admin à banque pour voir la liste des banque ajoutés par le super admin
+//     @OneToMany
+//     // (mappedBy = "superAdmin")
+//    // @JsonIgnoreProperties(value = {"admin"})
+//     private  List<Banque> banque;
     
-    //Liaison super type à banque pour voir la liste des type ajoutés par le super admin
-    @OneToMany
-    // (mappedBy = "superAdmin")
-   // @JsonIgnoreProperties(value = {"admin"})
-    private  List<TypeBanque> typeBanques;
+//     //Liaison super type à banque pour voir la liste des type ajoutés par le super admin
+//     @OneToMany
+//     // (mappedBy = "superAdmin")
+//    // @JsonIgnoreProperties(value = {"admin"})
+//     private  List<TypeBanque> typeBanques;
 
 
     // @OneToMany
