@@ -34,17 +34,19 @@ public class Admin {
     private String motDePasse;
 
     // //Pour voir la liste des agents ajoutés par l'admin
-    // @OneToMany
-    // // (mappedBy="admin")
-    // // @JsonIgnoreProperties(value = {"admin"})
-    // private  List<Agent> agent;
+    @OneToMany
+    (mappedBy="admin")
+    // @JsonIgnoreProperties(value = {"admin"})
+    private  List<Agent> agent;
 
     // //Liaison superadmin à admin
-    // @ManyToOne
-    // private SuperAdmin superAdmin;
+    @ManyToOne
+    @JoinColumn(name = "idSuperAdmin")
+    private SuperAdmin superAdmin;
 
     // // Liaison  banque à admin 
-    // @OneToOne (mappedBy = "banque")
-    // private Banque banque;
+    @OneToOne 
+    @JoinColumn(name = "idBanque")
+    private Banque banque;
     
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -31,12 +32,14 @@ public class Paiement {
     private Date heurePaiement;
 
     //Liée l'id de la cotisation au paiement pour voir la cotisation liée à un paiement specifique
-    // @ManyToOne
-    // private Cotisation cotisation;
+    @ManyToOne
+    @JoinColumn(name = "idCotisation")
+    private Cotisation cotisation;
     
     // //Liaison du user au paiement pour voir le user qui faire le paiement
-    // @ManyToOne
-    // private Utilisateur utilisateur;
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur")
+    private Utilisateur utilisateur;
 
     
 

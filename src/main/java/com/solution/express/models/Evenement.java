@@ -40,8 +40,9 @@ public class Evenement {
 
 
     // //Liaison du user au rapport pour voir le user qui a elaborer le rapport
-    // @ManyToOne
-    // private Utilisateur utilisateur;
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur")
+    private Utilisateur utilisateur;
 
     
 }

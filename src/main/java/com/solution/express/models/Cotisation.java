@@ -12,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
@@ -49,16 +50,16 @@ public class Cotisation {
     private Date dateFin;
 
     // //Liaison User aux cotisation
-    // @ManyToMany
-    // // (mappedBy="cotisation")
-    // private List<Utilisateur> utilisateur;
+    @ManyToMany
+    @JoinColumn(name = "idUtilisateur")
+    private List<Utilisateur> utilisateur;
 
 
     // //Pour afficher la liste des paiements liée à la cotisation
-    //  @OneToMany
-    // //  (mappedBy="cotisation")
-    // // @JsonIgnoreProperties(value = {"utiliateur"})
-    // private  List<Paiement> paiement;
+     @OneToMany
+     (mappedBy="cotisation", cascade = CascadeType.ALL)
+    // @JsonIgnoreProperties(value = {"utiliateur"})
+    private  List<Paiement> paiement;
     
     
 }

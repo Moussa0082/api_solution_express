@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -62,16 +63,18 @@ public class Demande {
     private String etatCivil;
 
     //Lier la demande faite à un type specifique
-    // @ManyToOne
-    // private TypeBanque typeBanque;
+    @ManyToOne
+    @JoinColumn(name = "idTypeBanque")
+    private TypeBanque typeBanque;
 
     // //Liaison agent à la demande pour voir l'agent qui s'occuper de la demande
-    // @ManyToMany
-    // // (mappedBy = "demande")
-    // private List<Agent> agent;
+    @ManyToMany
+    @JoinColumn(name = "idAgent")
+    // (mappedBy = "idAgent", cascade = CascadeType.ALL)
+    Set<Agent> agent;
 
     // //Lier l'id de l'utilisateur à la demande pour voir l'utilisateur qui a effectué la demande
-    // @ManyToOne
-    // private Utilisateur utilisateur;
+    @ManyToOne
+    private Utilisateur utilisateur;
 
 }

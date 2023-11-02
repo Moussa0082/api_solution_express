@@ -32,22 +32,23 @@ public class Banque {
     private String image;
 
     // //Liste des agents de la banque
-    // @OneToMany(mappedBy="banque" ,cascade = CascadeType.ALL)
-    // // @JsonIgnoreProperties(value = {"admin"})
-    // private  List<Agent> agents;
+    @OneToMany(mappedBy="banque" ,cascade = CascadeType.ALL)
+    // @JsonIgnoreProperties(value = {"admin"})
+    private  List<Agent> agents;
     
     // //Liste des types de demande de la banque
-    // @OneToMany
-    // // (mappedBy="banque" ,cascade = CascadeType.ALL)
-    // // @JsonIgnoreProperties(value = {"admin"})
-    // private  List<TypeBanque> typeBanque;
+    @OneToMany
+    (mappedBy="banque" ,cascade = CascadeType.ALL)
+    // @JsonIgnoreProperties(value = {"admin"})
+    private  List<TypeBanque> typeBanque;
 
     // //Liaison admin à banque
-    // @OneToOne
-    // @JoinColumn(name = "id_admin")
-    // private Admin admin;
+    @OneToOne
+    @JoinColumn(name = "id_admin")
+    private Admin admin;
 
-    // @ManyToOne
-    // private SuperAdmin superAdmin;
+    @ManyToOne
+    @JoinColumn(name = "idSuperAdmin")
+    private SuperAdmin superAdmin;
     
 }

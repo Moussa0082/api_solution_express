@@ -31,18 +31,20 @@ public class TypeBanque {
     private String image;
 
     //Joindre le superadmin à la baqnque l'id du super admin pour connaitre le super admin qui l'a crée
-    // @ManyToOne
-    // private SuperAdmin superAdmin;
+    @ManyToOne
+    @JoinColumn(name="idSuperAdmin")
+    private SuperAdmin superAdmin;
     
     // //Joindre la banque a son type
-    // @ManyToOne
-    // private Banque banque;
+    @ManyToOne
+    @JoinColumn(name = "idBanque")
+    private Banque banque;
 
     // //Liste des demandes dans le type
-    // @OneToMany
-    // // (mappedBy = "typeBanque" ,cascade = CascadeType.ALL)
-    // // @JsonIgnoreProperties(value = {"admin"})
-    // private  List<Demande> demande;
+    @OneToMany
+    (mappedBy = "typeBanque" ,cascade = CascadeType.ALL)
+    // @JsonIgnoreProperties(value = {"admin"})
+    private  List<Demande> demande;
 
     
    
