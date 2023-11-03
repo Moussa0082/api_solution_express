@@ -6,4 +6,7 @@ import com.solution.express.models.Admin;
 
 public interface AdminRepository  extends JpaRepository<Admin,Integer>{
     
+
+    Boolean existsByEmail(String email);
+
 }

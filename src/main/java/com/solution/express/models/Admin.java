@@ -2,6 +2,8 @@ package com.solution.express.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,19 +35,24 @@ public class Admin {
     @Column(nullable = false)
     private String motDePasse;
 
-    // //Pour voir la liste des agents ajoutés par l'admin
+    @Column
+    private boolean isActive = true;
+
+    //Pour voir la liste des agents ajoutés par l'admin
     @OneToMany
     (mappedBy="admin")
-    // @JsonIgnoreProperties(value = {"admin"})
+    @JsonIgnore
     private  List<Agent> agent;
 
-    // //Liaison superadmin à admin
+    //Liaison superadmin à admin
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "idSuperAdmin")
     private SuperAdmin superAdmin;
 
-    // // Liaison  banque à admin 
+    // Liaison  banque à admin 
     @OneToOne 
+    @JsonIgnore
     @JoinColumn(name = "idBanque")
     private Banque banque;
     

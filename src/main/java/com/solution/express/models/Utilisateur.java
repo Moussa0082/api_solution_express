@@ -3,6 +3,9 @@ package com.solution.express.models;
 
 import java.util.List;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -19,12 +22,23 @@ public class Utilisateur {
     @Column(nullable = false)
     private String prenom;
 
-    @Column(nullable = false, unique = true)
+    @NotEmpty
+    @Email
+    @Size(max = 255)
+    @Column(unique = true)
     // @Email(message = "Email incorrect !")
     private String email;
 
     @Column(nullable = false)
     private String motDePasse;
+
+    @Column(unique = true)
+    private String image;
+
+     //pour recuperr la liste des alertes d'un utlisateur specifique
+    @OneToMany
+    (mappedBy = "utilisateur",cascade = CascadeType.ALL)
+     private List<Alerte> alerte;
 
         
    //Liaison demande à l'utilisateur pour voir la liste des demandes effectuer par le user
