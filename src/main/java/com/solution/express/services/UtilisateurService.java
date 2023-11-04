@@ -97,12 +97,14 @@ public class UtilisateurService {
 
             // Mettre à jour l'image si fournie
             if (imageFile != null) {
-                String emplacementImage = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                String emplacementImage = "C:\\xampp\\htdocs\\solution_express";
+                // String emplacementImage = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
                 String nomImage = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                 Path cheminImage = Paths.get(emplacementImage).resolve(nomImage);
 
                 Files.copy(imageFile.getInputStream(), cheminImage, StandardCopyOption.REPLACE_EXISTING);
-                utilisateurExistant.setImage("http://localhost/solution\\express\\images" + nomImage);
+                utilisateurExistant.setImage("http://localhost/solution_express\\images" + nomImage);
+                // utilisateurExistant.setImage("http://localhost/solution\\express\\images" + nomImage);
             }
             
 
