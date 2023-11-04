@@ -1,7 +1,10 @@
 package com.solution.express.models;
 
 
+import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,6 +15,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Data;
 
 @Entity
@@ -29,6 +34,11 @@ public class TypeBanque {
     private String description;
     
     private String image;
+
+     
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private Date dateCreated;
 
     //Joindre le superadmin à la baqnque l'id du super admin pour connaitre le super admin qui l'a crée
     @ManyToOne

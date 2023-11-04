@@ -35,7 +35,7 @@ public class UtilisateurService {
     
             // Traitement du fichier image
             if (imageFile != null) {
-                String imageLocation = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                String imageLocation = "C:\\xampp\\htdocs\\solution_express";
                 try {
                     Path imageRootLocation = Paths.get(imageLocation);
                     if (!Files.exists(imageRootLocation)) {
@@ -45,7 +45,7 @@ public class UtilisateurService {
                     String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                     Path imagePath = imageRootLocation.resolve(imageName);
                     Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-                    utilisateur.setImage("http://localhost/solution\\express\\images" + imageName);
+                    utilisateur.setImage("http://localhost/solution_express\\images" + imageName);
                 } catch (IOException e) {
                     throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
                 }
@@ -133,13 +133,15 @@ public class UtilisateurService {
             throw new NoContentException("Aucun utilisateur trouvé");
         return utilisateurs;
     }
-    public Utilisateur getUtilisateurById(int idUtilisateur){
 
-        Utilisateur utilisateur= utilisateurRepository.findByIdUtilisateur(idUtilisateur);
-        if(utilisateur ==null)
-            throw new EntityNotFoundException("cet utilisateur n'existe pas");
-        return utilisateur;
-    }
+    
+    // public Utilisateur getUtilisateurById(int idUtilisateur){
+
+    //     Utilisateur utilisateur= utilisateurRepository.findByIdUtilisateur(idUtilisateur);
+    //     if(utilisateur ==null)
+    //         throw new EntityNotFoundException("cet utilisateur n'existe pas");
+    //     return utilisateur;
+    // }
 
     //Get user byID
     public ResponseEntity<?> findById(Integer id) {

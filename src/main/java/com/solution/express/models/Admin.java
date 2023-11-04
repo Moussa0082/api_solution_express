@@ -35,6 +35,8 @@ public class Admin {
     @Column(nullable = false)
     private String motDePasse;
 
+    private String image;
+
     @Column
     private boolean isActive = true;
 

@@ -35,7 +35,7 @@ public class Demande {
 
     private String photoValide;
 
-    private boolean statutDemande;
+    private Boolean statutDemande = false;
 
     @Column(nullable = false)
     private String numero;

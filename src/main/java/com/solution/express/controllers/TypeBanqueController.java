@@ -17,59 +17,58 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.solution.express.models.Utilisateur;
-import com.solution.express.services.UtilisateurService;
+import com.solution.express.models.Banque;
+import com.solution.express.models.TypeBanque;
+import com.solution.express.services.TypeBanqueService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
-
 @RestController
-@RequestMapping("/user")
-public class UtilisateurController {
+@RequestMapping("/typeBanque")
+public class TypeBanqueController {
+    
+    @Autowired
+   private TypeBanqueService typeBanqueService;
 
-      @Autowired
-      private UtilisateurService utilisateurService;
-
-
-      //Create user
-          @PostMapping("/create")
-    @Operation(summary = "Création d'un utilisateur")
-    public ResponseEntity<Utilisateur> createUtilisateur(
-            @Valid @RequestParam("utilisateur") String utilisateurString,
+    //Create banque
+    @PostMapping("/create")
+    @Operation(summary = "Création type banque")
+    public ResponseEntity<TypeBanque> createTypeBanque(
+            @Valid @RequestParam("typeBanque") String typeBanqueString,
             @RequestParam(value = "image", required = false) MultipartFile imageFile)
             throws Exception {
 
-        Utilisateur utilisateur = new Utilisateur();
+        TypeBanque typeBanque = new TypeBanque();
         try {
-            utilisateur = new JsonMapper().readValue(utilisateurString, Utilisateur.class);
+            typeBanque = new JsonMapper().readValue(typeBanqueString, TypeBanque.class);
         } catch (JsonProcessingException e) {
             throw new Exception(e.getMessage());
         }
 
-        Utilisateur savedUtilisateur = utilisateurService.createUtilisateur(utilisateur, imageFile);
+        TypeBanque savedTypeBanque = typeBanqueService.createTypeBanque(typeBanque, imageFile);
 
-        return new ResponseEntity<>(savedUtilisateur, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedTypeBanque, HttpStatus.CREATED);
     }
 
      
     //Mettre à jour un user
       @PutMapping("/update/{id}")
-    @Operation(summary = "Mise à jour d'un utilisateur par son Id ")
-    public ResponseEntity<Utilisateur> updateUtilisateur(
+    @Operation(summary = "Mise à jour du type d'une  banque par son Id ")
+    public ResponseEntity<TypeBanque> updateTypeBanque(
             @PathVariable Integer id,
-            @Valid @RequestParam("utilisateur") String utilisateurString,
+            @Valid @RequestParam("typeBanque") String typeBanqueString,
             @RequestParam(value = "image", required = false) MultipartFile imageFile) {
-        Utilisateur utilisateur = new Utilisateur();
+        TypeBanque typeBanque = new TypeBanque();
         try {
-            utilisateur = new JsonMapper().readValue(utilisateurString, Utilisateur.class);
+            typeBanque = new JsonMapper().readValue(typeBanqueString, TypeBanque.class);
         } catch (JsonProcessingException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         try {
-            Utilisateur utilisateurMisAjour = utilisateurService.updateUtilisateur(id, utilisateur, imageFile);
-            return new ResponseEntity<>(utilisateurMisAjour, HttpStatus.OK);
+            TypeBanque typeBanqueMisAjour = typeBanqueService.updateTypeBanque(id, typeBanque, imageFile);
+            return new ResponseEntity<>(typeBanqueMisAjour, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -78,25 +77,26 @@ public class UtilisateurController {
 
 
          @GetMapping("/read")
-    //  @Operation(summary = "Affichage de la  liste des utilisateurs")
-    public ResponseEntity<List<Utilisateur>> getUtilisateur(){
-        return new ResponseEntity<>(utilisateurService.getAllUtilisateur(),HttpStatus.OK);}
+     @Operation(summary = "Affichage de la  liste des banque")
+    public ResponseEntity<List<TypeBanque>> getAllTypeBanque(){
+        return typeBanqueService.getAllTypeBanque();}
 
 
        
-    //Lire un user spécifique
+    // Lire un banque spécifique
     @GetMapping("/read/{id}")
-    public ResponseEntity<?> getUtilisateurById(@PathVariable Integer id) {
-        return utilisateurService.findById(id);
+    public ResponseEntity<?> getTypeBanqueById(@PathVariable Integer id) {
+        return typeBanqueService.findById(id);
     }
 
 
         //Supprimer un utilisateur
-           @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     // @Operation(summary = "Supprimer un utilisateur par son ID")
     public String delete(@Valid @PathVariable Integer id) {
-        return utilisateurService.deleteUtilisateur(id);
+        return typeBanqueService.deleteTypeBanque(id);
     }
 
     
+
 }

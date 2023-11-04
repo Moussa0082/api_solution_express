@@ -21,9 +21,16 @@ public class SuperAdminService {
 
     //Methode pour créer un super admin 
      public ResponseEntity<String> createSuperAdmin(SuperAdmin superAdmin) {
-        superAdminRepository.save(superAdmin);
+         if (superAdminRepository.findByEmail(superAdmin.getEmail()) == null) {
+             superAdminRepository.save(superAdmin);
+
+             return new ResponseEntity<>("Compte super admin créer avec succès", HttpStatus.CREATED);
+            } else {
+                
+                return new ResponseEntity<>("Super Admin existant.", HttpStatus.BAD_REQUEST);
+         }
+     
         
-        return new ResponseEntity<>("Compte super admin créer avec succès", HttpStatus.CREATED);
        
     }
 
@@ -54,7 +61,7 @@ public class SuperAdminService {
        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 
-      //suppression d'un user specifique 
+      //suppression d'un super admin specifique 
     public String deleteSuperAdmin(Integer id) {
         Optional <SuperAdmin> superadmin = superAdminRepository.findById(id);
          if (superadmin.isPresent()) {

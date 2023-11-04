@@ -19,8 +19,6 @@ import com.solution.express.models.SuperAdmin;
 import com.solution.express.repository.SuperAdminRepository;
 import com.solution.express.services.SuperAdminService;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/superAdmin")
 public class SuperAdminController {

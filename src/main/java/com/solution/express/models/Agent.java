@@ -34,6 +34,10 @@ public class Agent {
     @Column(nullable = false)
     private String motDePasse;
 
+    private String  image;
+
+    private Boolean isActive = true;
+
     //Lier l'admin à l'agent pour voir l'admin qui la ajouter
     @ManyToOne
     @JoinColumn(name = "idAdmin")
