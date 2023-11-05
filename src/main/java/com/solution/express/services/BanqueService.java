@@ -52,7 +52,7 @@ public class BanqueService {
                     throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
                 }
             }
-    
+        
     
             return banqueRepository.save(banque);
         } else {

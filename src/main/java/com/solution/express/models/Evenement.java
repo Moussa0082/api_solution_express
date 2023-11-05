@@ -24,6 +24,9 @@ public class Evenement {
     private int idEvenement;
     
     @Column(nullable = false)
+    private String nomEvenment;
+    
+    @Column(nullable = false)
     private String descriptionEvenment;
     
     @Column(nullable = false)

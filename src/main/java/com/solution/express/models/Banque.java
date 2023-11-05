@@ -1,6 +1,9 @@
 package com.solution.express.models;
 
+import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Data;
 
 @Entity
@@ -30,6 +35,10 @@ public class Banque {
 
     @Column(nullable = false)
     private String image;
+
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private Date dateCreated;
 
     // //Liste des agents de la banque
     @OneToMany(mappedBy="banque" ,cascade = CascadeType.ALL)

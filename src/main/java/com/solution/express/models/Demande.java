@@ -38,7 +38,10 @@ public class Demande {
     private Boolean statutDemande = false;
 
     @Column(nullable = false)
-    private String numero;
+    private String numeroUser;
+    
+    @Column(nullable = false)
+    private String numeroDemande;
 
     @Column(nullable = false)
     private String sexe;

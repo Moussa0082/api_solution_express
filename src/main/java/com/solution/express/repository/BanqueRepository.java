@@ -7,6 +7,8 @@ import com.solution.express.models.Banque;
 public interface BanqueRepository extends JpaRepository<Banque,Integer> {
  
      Banque findBanqueByNom (String nom);
+
+    
     
 
 }
