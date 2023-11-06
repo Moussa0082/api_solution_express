@@ -1,7 +1,10 @@
 package com.solution.express.models;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,5 +54,8 @@ public class Agent {
     // //liaison demande à agent plusieurs à plusieurs
     @ManyToMany
     (mappedBy = "agent", cascade = CascadeType.ALL)
+    @JsonIgnore
     Set<Demande> demande;
+
+    
 }

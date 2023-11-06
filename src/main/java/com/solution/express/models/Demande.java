@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,7 +30,11 @@ public class Demande {
 
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date dateDemande;
+    private String dateDemande;
+
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private String HeureDemande;
 
     private String photoDidentite;
 
@@ -68,16 +73,19 @@ public class Demande {
     //Lier la demande faite à un type specifique
     @ManyToOne
     @JoinColumn(name = "idTypeBanque")
+    @JsonIgnore
     private TypeBanque typeBanque;
 
     // //Liaison agent à la demande pour voir l'agent qui s'occuper de la demande
     @ManyToMany
     @JoinColumn(name = "idAgent")
+    @JsonIgnore
     // (mappedBy = "idAgent", cascade = CascadeType.ALL)
     Set<Agent> agent;
 
     // //Lier l'id de l'utilisateur à la demande pour voir l'utilisateur qui a effectué la demande
     @ManyToOne
+    // @JsonIgnore
     private Utilisateur utilisateur;
 
 }

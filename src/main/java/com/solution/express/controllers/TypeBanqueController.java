@@ -35,21 +35,22 @@ public class TypeBanqueController {
     @PostMapping("/create")
     @Operation(summary = "Création type banque")
     public ResponseEntity<TypeBanque> createTypeBanque(
-            @Valid @RequestParam("typeBanque") String typeBanqueString,
-            @RequestParam(value = "image", required = false) MultipartFile imageFile)
-            throws Exception {
+        @Valid @RequestParam("typeBanque") String typeBanqueString,
+        @RequestParam(value = "image", required = false) MultipartFile imageFile)
+        throws Exception {
 
-        TypeBanque typeBanque = new TypeBanque();
-        try {
-            typeBanque = new JsonMapper().readValue(typeBanqueString, TypeBanque.class);
-        } catch (JsonProcessingException e) {
-            throw new Exception(e.getMessage());
-        }
-
-        TypeBanque savedTypeBanque = typeBanqueService.createTypeBanque(typeBanque, imageFile);
-
-        return new ResponseEntity<>(savedTypeBanque, HttpStatus.CREATED);
+    TypeBanque typeBanque = new TypeBanque();
+    try {
+        typeBanque = new JsonMapper().readValue(typeBanqueString, TypeBanque.class);
+    } catch (JsonProcessingException e) {
+        throw new Exception(e.getMessage());
     }
+
+    TypeBanque savedTypeBanque = typeBanqueService.createTypeBanque(typeBanque, imageFile);
+
+    return new ResponseEntity<>(savedTypeBanque, HttpStatus.CREATED);
+}
+
 
      
     //Mettre à jour un user
@@ -67,7 +68,7 @@ public class TypeBanqueController {
         }
 
         try {
-            TypeBanque typeBanqueMisAjour = typeBanqueService.updateTypeBanque(id, typeBanque, imageFile);
+            TypeBanque typeBanqueMisAjour = typeBanqueService.modifierTypeBanque(id, typeBanque, imageFile);
             return new ResponseEntity<>(typeBanqueMisAjour, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -77,9 +78,10 @@ public class TypeBanqueController {
 
 
          @GetMapping("/read")
-     @Operation(summary = "Affichage de la  liste des banque")
+     @Operation(summary = "Affichage de la  liste des type banque")
     public ResponseEntity<List<TypeBanque>> getAllTypeBanque(){
         return typeBanqueService.getAllTypeBanque();}
+
 
 
        

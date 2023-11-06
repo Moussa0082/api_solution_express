@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -64,17 +65,38 @@ public class AgentService {
             }
 
             //Modifier  agent methode
-            public Agent updateAgent(Integer id, Agent agent) {
-                return agentRepository.findById(id)
-                        .map(ag -> {
-                            ag.setNom(agent.getNom());
-                            ag.setPrenom(agent.getPrenom());
-                            ag.setEmail(agent.getEmail());
-                            ag.setMotDePasse(agent.getMotDePasse());
-                            return agentRepository.save(ag);
-                        }).orElseThrow(() -> new RuntimeException(("Agent non existant avec l'ID " + id)));
+            
+     public Agent updateAgent(Integer id, Agent agent, MultipartFile imageFile) throws Exception {
+        try {
+            Agent agentExistant = agentRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Agent non trouvée avec l'ID : " + id));
 
+            // Mettre à jour les champs
+            agentExistant.setNom(agent.getNom());
+            agentExistant.setPrenom(agent.getPrenom());
+            agentExistant.setEmail(agent.getEmail());
+            agentExistant.setMotDePasse(agent.getMotDePasse());
+            
+
+            // Mettre à jour l'image si fournie
+            if (imageFile != null) {
+                // String emplacementImage = "C:\\xampp\\htdocs\\solution_express";
+                String emplacementImage = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                String nomImage = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+                Path cheminImage = Paths.get(emplacementImage).resolve(nomImage);
+
+                Files.copy(imageFile.getInputStream(), cheminImage, StandardCopyOption.REPLACE_EXISTING);
+                // adminExistant.setImage("http://localhost/solution_express\\images" + nomImage);
+                agent.setImage("http://localhost/solution/" + nomImage);
             }
+
+            // Enregistrer le user mise à jour
+            return agentRepository.save(agentExistant);
+        } catch (NoSuchElementException ex) {
+           throw new NoSuchElementException("Une erreur s'est produite lors de la mise à jour de l'agent avec l'ID : " + id);
+
+        } 
+    }
 
          //Recuperer la liste des agents
             public ResponseEntity<List<Agent>> getAllAgent() {

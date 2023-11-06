@@ -51,23 +51,7 @@ public class UtilisateurService {
                 }
             }
     
-            // Traitement du fichier audio
-            // if (audioFile != null) {
-            //     String audioLocation = "C:\\xampp\\htdocs\\keneyaDeme\\audios";
-            //     try {
-            //         Path audioRootLocation = Paths.get(audioLocation);
-            //         if (!Files.exists(audioRootLocation)) {
-            //             Files.createDirectories(audioRootLocation);
-            //         }
-    
-            //         String audioName = UUID.randomUUID().toString() + "_" + audioFile.getOriginalFilename();
-            //         Path audioPath = audioRootLocation.resolve(audioName);
-            //         Files.copy(audioFile.getInputStream(), audioPath, StandardCopyOption.REPLACE_EXISTING);
-            //         maladie.setAudio("http://localhost/keneyaDeme/audios/" + audioName);
-            //     } catch (IOException e) {
-            //         throw new Exception("Erreur lors du traitement du fichier audio : " + e.getMessage());
-            //     }
-            // }
+         
     
             return utilisateurRepository.save(utilisateur);
         } else {
@@ -97,26 +81,15 @@ public class UtilisateurService {
 
             // Mettre à jour l'image si fournie
             if (imageFile != null) {
-                String emplacementImage = "C:\\xampp\\htdocs\\solution_express";
-                // String emplacementImage = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                // String emplacementImage = "C:\\xampp\\htdocs\\solution_express";
+                String emplacementImage = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
                 String nomImage = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                 Path cheminImage = Paths.get(emplacementImage).resolve(nomImage);
 
                 Files.copy(imageFile.getInputStream(), cheminImage, StandardCopyOption.REPLACE_EXISTING);
-                utilisateurExistant.setImage("http://localhost/solution_express\\images" + nomImage);
-                // utilisateurExistant.setImage("http://localhost/solution\\express\\images" + nomImage);
+                // utilisateurExistant.setImage("http://localhost/solution_express\\images" + nomImage);
+                utilisateurExistant.setImage("http://localhost/solution/" + nomImage);
             }
-            
-
-            // Mettre à jour l'audio si fourni
-            // if (audioFile != null) {
-            //     String emplacementAudio = "C:\\xampp\\htdocs\\keneyaDeme\\audios";
-            //     String nomAudio = UUID.randomUUID().toString() + "_" + audioFile.getOriginalFilename();
-            //     Path cheminAudio = Paths.get(emplacementAudio).resolve(nomAudio);
-
-            //     Files.copy(audioFile.getInputStream(), cheminAudio, StandardCopyOption.REPLACE_EXISTING);
-            //     utilisateurExistant.setAudio("http://localhost/keneyaDeme/audios/" + nomAudio);
-            // }
 
             // Enregistrer le user mise à jour
             return utilisateurRepository.save(utilisateurExistant);
@@ -136,14 +109,7 @@ public class UtilisateurService {
         return utilisateurs;
     }
 
-    
-    // public Utilisateur getUtilisateurById(int idUtilisateur){
 
-    //     Utilisateur utilisateur= utilisateurRepository.findByIdUtilisateur(idUtilisateur);
-    //     if(utilisateur ==null)
-    //         throw new EntityNotFoundException("cet utilisateur n'existe pas");
-    //     return utilisateur;
-    // }
 
     //Get user byID
     public ResponseEntity<?> findById(Integer id) {

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.solution.express.models.Admin;
+import com.solution.express.models.Agent;
 import com.solution.express.models.Utilisateur;
 import com.solution.express.repository.AdminRepository;
 import com.solution.express.services.AdminService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
@@ -38,21 +41,8 @@ public class AdminController {
     @Autowired
     private AdminRepository adminRepository;
 
-    
-    // public ResponseEntity<String> createAdmin(@RequestBody Admin admin, ){
 
-    //      String mail = admin.getEmail();
-    //      if(adminService.emailExisteDeja(mail)){
-    
-    //     return new ResponseEntity<>("L' email " + mail + " existe déjà , essayer un autre email.", HttpStatus.UNAUTHORIZED);
-          
-    //      }
-       
-    //    return adminService.createAdmin(admin, image);
-        
-    // }
      @PostMapping("/create")
-    //doulon non corriger
      public ResponseEntity<Admin> createAdmin(
             @Valid @RequestParam("admin") String adminString,
             @RequestParam(value = "image", required = false) MultipartFile imageFile)
@@ -66,8 +56,6 @@ public class AdminController {
                     throw new Exception(e.getMessage());
                 }
             
-               
-            
                 // je le cree et le sauvegarde.
                 Admin savedAdmin = adminService.createAdmin(admin, imageFile);
             
@@ -76,10 +64,26 @@ public class AdminController {
 
 
 
-     //Modifier superAdmin
+     //Modifier Admin
     @PutMapping("/update/{id}")
-    public Admin UpdateAdmin(@PathVariable Integer id, @RequestBody Admin admin){
-        return adminService.updateAdmin(id, admin);
+     @Operation(summary = "Mise à jour d'un admin par son Id ")
+    public ResponseEntity<Admin> updateAdmin(
+            @PathVariable Integer id,
+            @Valid @RequestParam("admin") String adminString,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile) {
+        Admin admin = new Admin();
+        try {
+            admin = new JsonMapper().readValue(adminString, Admin.class);
+        } catch (JsonProcessingException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Admin adminMisAjour = adminService.updateAdmin(id, admin, imageFile);
+            return new ResponseEntity<>(adminMisAjour, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // Get Liste des super admin
@@ -107,7 +111,19 @@ public class AdminController {
     }
 
 
-
+           //Supprimer un admin
+           @DeleteMapping("/delete/{id}")
+           public String deleteAgent(@PathVariable Integer id){
+             Optional <Admin> admin = adminRepository.findById(id);
+             if (admin.isPresent()) {
+                 adminRepository.deleteById(id);
+                 adminService.deleteAdmin(id);  
+                 return " Admin supprimé avec succès.";
+             } else {
+               
+                 return "Admin non existant avec l'ID " + id;
+             }
+           }
 
     
 }

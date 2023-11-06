@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.solution.express.models.Admin;
-import com.solution.express.models.SuperAdmin;
+import com.solution.express.models.Agent;
 import com.solution.express.models.Utilisateur;
 import com.solution.express.repository.AdminRepository;
 
@@ -27,21 +28,13 @@ public class AdminService {
     @Autowired
     private AdminRepository adminRepository;
 
-    //Methode pour créer un  admin 
-    //  public ResponseEntity<String> createAdmin(Admin admin) {
-      
-    //  adminRepository.save(admin);
-    //  return new ResponseEntity<>("Compte admin créer avec succès", HttpStatus.CREATED);
-
-    // }
-
     //créer un admin
       public Admin createAdmin(Admin admin, MultipartFile imageFile) throws Exception {
         if (adminRepository.findByEmail(admin.getEmail()) == null) {
     
             // Traitement du fichier image
             if (imageFile != null) {
-                String imageLocation = "C:\\xampp\\htdocs\\solution_express";
+                String imageLocation = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
                 try {
                     Path imageRootLocation = Paths.get(imageLocation);
                     if (!Files.exists(imageRootLocation)) {
@@ -51,15 +44,14 @@ public class AdminService {
                     String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                     Path imagePath = imageRootLocation.resolve(imageName);
                     Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-                    admin.setImage("http://localhost/solution_express\\images" + imageName);
+                    admin.setImage("http://localhost/solution/" + imageName);
                 } catch (IOException e) {
                     throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
                 }
             }
     
-    
-             adminRepository.save(admin);
-             return admin;
+             return  adminRepository.save(admin);
+           
 
         } else {
             throw new IllegalArgumentException("L'admin avec l'amail " + admin.getEmail() + " existe déjà");
@@ -84,16 +76,37 @@ public class AdminService {
     }
 
      //Modifier  admin methode
-    public Admin updateAdmin(Integer id, Admin admin) {
-        return adminRepository.findById(id)
-                .map(ad -> {
-                    ad.setNom(admin.getNom());
-                    ad.setPrenom(admin.getPrenom());
-                    ad.setEmail(admin.getEmail());
-                    ad.setMotDePasse(admin.getMotDePasse());
-                    return adminRepository.save(ad);
-                }).orElseThrow(() -> new RuntimeException(("Admin non existant avec l'ID " + id)));
-    
+
+     public Admin updateAdmin(Integer id, Admin admin, MultipartFile imageFile) throws Exception {
+        try {
+            Admin adminExistant = adminRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Admin non trouvée avec l'ID : " + id));
+
+            // Mettre à jour les champs
+            adminExistant.setNom(admin.getNom());
+            adminExistant.setPrenom(admin.getPrenom());
+            adminExistant.setEmail(admin.getEmail());
+            adminExistant.setMotDePasse(admin.getMotDePasse());
+            
+
+            // Mettre à jour l'image si fournie
+            if (imageFile != null) {
+                // String emplacementImage = "C:\\xampp\\htdocs\\solution_express";
+                String emplacementImage = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                String nomImage = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+                Path cheminImage = Paths.get(emplacementImage).resolve(nomImage);
+
+                Files.copy(imageFile.getInputStream(), cheminImage, StandardCopyOption.REPLACE_EXISTING);
+                // adminExistant.setImage("http://localhost/solution_express\\images" + nomImage);
+                adminExistant.setImage("http://localhost/solution/" + nomImage);
+            }
+
+            // Enregistrer le user mise à jour
+            return adminRepository.save(adminExistant);
+        } catch (NoSuchElementException ex) {
+           throw new NoSuchElementException("Une erreur s'est produite lors de la mise à jour de l'admin avec l'ID : " + id);
+
+        } 
     }
 
      //Recuperer la liste des Admins
@@ -112,7 +125,7 @@ public class AdminService {
     public ResponseEntity<String> disableAdmin(Integer id) {
         Optional<Admin> admin = adminRepository.findById(id);
         if (admin.isPresent()) {
-            admin.get().setActive(false);
+            admin.get().setIsActive(false);
             adminRepository.save(admin.get());
             return new ResponseEntity<>("L'admin " + admin.get().getPrenom() + " " + admin.get().getNom() + " a été désactivé avec succès", HttpStatus.OK);
         } else {
@@ -124,12 +137,25 @@ public class AdminService {
     public ResponseEntity<String> enableAdmin(Integer id) {
         Optional<Admin> admin = adminRepository.findById(id);
         if (admin.isPresent()) {
-            admin.get().setActive(true);
+            admin.get().setIsActive(true);
             adminRepository.save(admin.get());
             return new ResponseEntity<>("L'admin " + admin.get().getPrenom() + " " + admin.get().getNom() + " a été activé avec succès", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Admin non trouvé avec l'ID " + id, HttpStatus.BAD_REQUEST);
         }
     }
+  
+      //Supprimer agent
+     public String deleteAdmin(Integer id) {
+        Optional <Admin> admin = adminRepository.findById(id);
+         if (admin.isPresent()) {
+             adminRepository.deleteById(id);
+             return "Admin supprimé avec succès.";
+         } else {
+           
+             return "Admin non existant.";
+         }
+     }
+
 
 }

@@ -38,7 +38,7 @@ public class TypeBanque {
      
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date dateCreated;
+    private String dateCreated;
 
     //Joindre le superadmin à la baqnque l'id du super admin pour connaitre le super admin qui l'a crée
     @ManyToOne

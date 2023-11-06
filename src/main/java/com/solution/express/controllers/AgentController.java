@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.solution.express.models.Agent;
-
+import com.solution.express.models.Utilisateur;
 import com.solution.express.repository.AgentRepository;
 
 import com.solution.express.services.AgentService;
@@ -64,8 +64,24 @@ public class AgentController {
      
       //Modifier agent
     @PutMapping("/update/{id}")
-    public Agent UpdateAgent(@PathVariable Integer id, @RequestBody Agent agent){
-        return agentService.updateAgent(id, agent);
+    @Operation(summary = "Mise à jour d'un agent par son Id ")
+    public ResponseEntity<Agent> updateAgent(
+            @PathVariable Integer id,
+            @Valid @RequestParam("agent") String agentString,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile) {
+        Agent agent = new Agent();
+        try {
+            agent = new JsonMapper().readValue(agentString, Agent.class);
+        } catch (JsonProcessingException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Agent agentMisAjour = agentService.updateAgent(id, agent, imageFile);
+            return new ResponseEntity<>(agentMisAjour, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
      
     //Liste des agents

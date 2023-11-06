@@ -37,8 +37,7 @@ public class Admin {
 
     private String image;
 
-    @Column
-    private boolean isActive = true;
+    private Boolean isActive = true;
 
     //Pour voir la liste des agents ajoutés par l'admin
     @OneToMany
@@ -48,13 +47,11 @@ public class Admin {
 
     //Liaison superadmin à admin
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "idSuperAdmin")
     private SuperAdmin superAdmin;
 
     // Liaison  banque à admin 
     @OneToOne 
-    @JsonIgnore
     @JoinColumn(name = "idBanque")
     private Banque banque;
     

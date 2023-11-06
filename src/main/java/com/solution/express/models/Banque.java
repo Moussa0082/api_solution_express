@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -38,16 +39,18 @@ public class Banque {
 
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date dateCreated;
+    private String dateCreated;
 
     // //Liste des agents de la banque
     @OneToMany(mappedBy="banque" ,cascade = CascadeType.ALL)
     // @JsonIgnoreProperties(value = {"admin"})
+    @JsonIgnore
     private  List<Agent> agents;
     
     // //Liste des types de demande de la banque
     @OneToMany
     (mappedBy="banque" ,cascade = CascadeType.ALL)
+    @JsonIgnore
     // @JsonIgnoreProperties(value = {"admin"})
     private  List<TypeBanque> typeBanque;
 

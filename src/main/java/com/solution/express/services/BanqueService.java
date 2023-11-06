@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,8 @@ public class BanqueService {
                     throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
                 }
             }
+            LocalDate localDate  =  LocalDate.now();
+            banque.setDateCreated(localDate.toString());
         
     
             return banqueRepository.save(banque);
@@ -94,8 +98,6 @@ public class BanqueService {
                 banqueExistant.setImage("http://localhost/solution\\express\\images" + nomImage);
             }
             
-
-
             // Enregistrer la banque mise à jour
             return banqueRepository.save(banqueExistant);
         } catch (NoSuchElementException ex) {
