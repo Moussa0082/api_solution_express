@@ -34,6 +34,9 @@ public class Cotisation {
     private Date dateCreation;
 
     @Column(nullable = false)
+    private String nom;
+    
+    @Column(nullable = false)
     private int frais;
 
     @Column(nullable = false)
@@ -49,6 +52,8 @@ public class Cotisation {
     @Column(nullable = true)
     private Date dateFin;
 
+    private String image;
+
     // //Liaison User aux cotisation
     @ManyToMany
     @JoinColumn(name = "idUtilisateur")
@@ -61,5 +66,14 @@ public class Cotisation {
     // @JsonIgnoreProperties(value = {"utiliateur"})
     private  List<Paiement> paiement;
     
+    @OneToMany
+    (mappedBy="cotisation", cascade = CascadeType.ALL)
+   // @JsonIgnoreProperties(value = {"utiliateur"})
+   private  List<Rapport> rapport;
+
+    @OneToMany
+    (mappedBy="cotisation", cascade = CascadeType.ALL)
+   // @JsonIgnoreProperties(value = {"utiliateur"})
+    private  List<Rapport> Evenement;
     
 }

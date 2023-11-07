@@ -60,7 +60,9 @@ public class TypeBanqueController {
             @PathVariable Integer id,
             @Valid @RequestParam("typeBanque") String typeBanqueString,
             @RequestParam(value = "image", required = false) MultipartFile imageFile) {
+        
         TypeBanque typeBanque = new TypeBanque();
+        
         try {
             typeBanque = new JsonMapper().readValue(typeBanqueString, TypeBanque.class);
         } catch (JsonProcessingException e) {

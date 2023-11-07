@@ -43,8 +43,8 @@ public class Alerte {
 
     private String sujet;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    // @Temporal(TemporalType.DATE)
+    // @JsonFormat(pattern = "dd-MM-yyyy")
     private String date;
 
   //lier l'utilisateur à l'alerte pour voir l'utilisateur concerner par l'alerte en question

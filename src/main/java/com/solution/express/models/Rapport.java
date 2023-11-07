@@ -42,4 +42,8 @@ public class Rapport {
     @JoinColumn(name = "idUtilisateur")
     private Utilisateur utilisateur;
 
+    @ManyToOne
+    @JoinColumn(name = "idCotisation")
+    private Cotisation cotisation;
+
 }

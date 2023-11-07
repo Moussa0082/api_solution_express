@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,19 +44,19 @@ public class TypeBanque {
     //Joindre le superadmin à la baqnque l'id du super admin pour connaitre le super admin qui l'a crée
     @ManyToOne
     @JoinColumn(name="idSuperAdmin")
+    @JsonIgnoreProperties(value = {"demande"})
     private SuperAdmin superAdmin;
     
     // //Joindre la banque a son type
     @ManyToOne
     @JoinColumn(name = "idBanque")
+    @JsonIgnoreProperties(value = {"demande"})
     private Banque banque;
 
     // //Liste des demandes dans le type
     @OneToMany
     (mappedBy = "typeBanque" ,cascade = CascadeType.ALL)
-    // @JsonIgnoreProperties(value = {"admin"})
+    @JsonIgnoreProperties(value = {"demande"})
     private  List<Demande> demande;
-
-    
    
 }

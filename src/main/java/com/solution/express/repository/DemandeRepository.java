@@ -16,6 +16,8 @@ public interface DemandeRepository extends JpaRepository<Demande,Integer>{
 
     Demande findByTypeBanqueAndUtilisateur(TypeBanque typeBanque, Utilisateur user);
 
+    List<Demande> findByUtilisateurIdUtilisateur(Integer idUtilisateur);
+
     // Demande findByDemandeUtilisateur(Utilisateur utilisateur, Integer id);
     // Demande findByNumeroDemande (String numeroDemande);
     // String findByTypeBanque (String TypeBanque);

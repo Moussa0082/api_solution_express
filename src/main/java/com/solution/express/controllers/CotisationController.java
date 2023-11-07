@@ -17,76 +17,81 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.solution.express.models.Cotisation;
 import com.solution.express.models.Utilisateur;
-import com.solution.express.services.UtilisateurService;
+import com.solution.express.services.CotisationService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
-
 @RestController
-@RequestMapping("/user")
-public class UtilisateurController {
+@RequestMapping("/cotisation")
+public class CotisationController {
 
-      @Autowired
-      private UtilisateurService utilisateurService;
 
+    @Autowired
+    private CotisationService cotisationService;
 
       //Create user
           @PostMapping("/create")
-    @Operation(summary = "Création d'un utilisateur")
-    public ResponseEntity<Utilisateur> createUtilisateur(
-            @Valid @RequestParam("utilisateur") String utilisateurString,
+    @Operation(summary = "Création d'une cotisation")
+    public ResponseEntity<Cotisation> createCotisation(
+            @Valid @RequestParam("cotisation") String cotisationString,
             @RequestParam(value = "image", required = false) MultipartFile imageFile)
             throws Exception {
-        Utilisateur utilisateur = new Utilisateur();
+        Cotisation cotisation = new Cotisation();
         try {
-            utilisateur = new JsonMapper().readValue(utilisateurString, Utilisateur.class);
+            cotisation = new JsonMapper().readValue(cotisationString, Cotisation.class);
         } catch (JsonProcessingException e) {
             throw new Exception(e.getMessage());
         }
 
-        Utilisateur savedUtilisateur = utilisateurService.createUtilisateur(utilisateur, imageFile);
+        Cotisation savedCotisation = cotisationService.createCotisation(cotisation, imageFile);
 
-        return new ResponseEntity<>(savedUtilisateur, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedCotisation, HttpStatus.CREATED);
     }
 
      
     //Mettre à jour un user
       @PutMapping("/update/{id}")
-    @Operation(summary = "Mise à jour d'un utilisateur par son Id ")
-    public ResponseEntity<Utilisateur> updateUtilisateur(
+    @Operation(summary = "Mise à jour d'une cotisation par son Id ")
+    public ResponseEntity<Cotisation> updateUtilisateur(
             @PathVariable Integer id,
-            @Valid @RequestParam("utilisateur") String utilisateurString,
+            @Valid @RequestParam("cotisation") String cotisationString,
             @RequestParam(value = "image", required = false) MultipartFile imageFile) {
-        Utilisateur utilisateur = new Utilisateur();
+        Cotisation cotisation = new Cotisation();
         try {
-            utilisateur = new JsonMapper().readValue(utilisateurString, Utilisateur.class);
+            cotisation = new JsonMapper().readValue(cotisationString, Cotisation.class);
         } catch (JsonProcessingException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         try {
-            Utilisateur utilisateurMisAjour = utilisateurService.updateUtilisateur(id, utilisateur, imageFile);
-            return new ResponseEntity<>(utilisateurMisAjour, HttpStatus.OK);
+            Cotisation cotisationMisAjour = cotisationService.updateCotisation(id, cotisation, imageFile);
+            return new ResponseEntity<>(cotisationMisAjour, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/{idCotisation}/createUser/{idUtilisateur}")
+    public Cotisation ajouterUtilisateurCotisation(@PathVariable int idCotisation, @PathVariable int idUtilisateur) throws Exception {
+        return cotisationService.ajouterUtilisateurCotisation(idCotisation, idUtilisateur);
     }
      
 
 
          @GetMapping("/read")
     //  @Operation(summary = "Affichage de la  liste des utilisateurs")
-    public ResponseEntity<List<Utilisateur>> getUtilisateur(){
-        return new ResponseEntity<>(utilisateurService.getAllUtilisateur(),HttpStatus.OK);}
+    public ResponseEntity<List<Cotisation>> getCotisation(){
+        return new ResponseEntity<>(cotisationService.getAllCotisation(),HttpStatus.OK);}
 
 
        
     //Lire un user spécifique
     @GetMapping("/read/{id}")
-    public ResponseEntity<?> getUtilisateurById(@PathVariable Integer id) {
-        return utilisateurService.findById(id);
+    public ResponseEntity<?> getCotisationById(@PathVariable Integer id) {
+        return cotisationService.findById(id);
     }
 
 
@@ -94,7 +99,7 @@ public class UtilisateurController {
            @DeleteMapping("/delete/{id}")
     // @Operation(summary = "Supprimer un utilisateur par son ID")
     public String delete(@Valid @PathVariable Integer id) {
-        return utilisateurService.deleteUtilisateur(id);
+        return cotisationService.deleteCotisation(id);
     }
 
     

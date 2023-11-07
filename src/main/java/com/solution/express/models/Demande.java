@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,12 +19,17 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Demande {
 
+    // @JsonIgnoreProperties({"agent", "utilisateur"})
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int idDemande;
@@ -73,13 +79,12 @@ public class Demande {
     //Lier la demande faite à un type specifique
     @ManyToOne
     @JoinColumn(name = "idTypeBanque")
-    @JsonIgnore
     private TypeBanque typeBanque;
 
     // //Liaison agent à la demande pour voir l'agent qui s'occuper de la demande
     @ManyToMany
     @JoinColumn(name = "idAgent")
-    @JsonIgnore
+    // @JsonIgnore
     // (mappedBy = "idAgent", cascade = CascadeType.ALL)
     Set<Agent> agent;
 

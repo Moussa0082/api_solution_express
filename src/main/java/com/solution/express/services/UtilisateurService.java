@@ -60,10 +60,10 @@ public class UtilisateurService {
     }
     
 
-    //get users byId
-    public Utilisateur getUtilisateurById(Integer id) {
-        return utilisateurRepository.findById(id).orElseThrow(() -> new RuntimeException("Cet utilisateur n'existe pas !"));
-    }
+    // //get users byId
+    // public Utilisateur getUtilisateurById(Integer id) {
+    //     return utilisateurRepository.findById(id).orElseThrow(() -> new RuntimeException("Cet utilisateur n'existe pas !"));
+    // }
 
 
     //Modifier un user
@@ -124,9 +124,6 @@ public class UtilisateurService {
    }
    
         
-    
-        
-
     //suppression d'un user specifique 
     public String deleteUtilisateur(Integer id) {
         Optional <Utilisateur> utiliateur = utilisateurRepository.findById(id);
