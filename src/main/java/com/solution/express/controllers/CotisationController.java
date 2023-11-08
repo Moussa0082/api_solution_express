@@ -125,12 +125,29 @@ public class CotisationController {
 
 
        
+        @RequestMapping("/addUser/{idCotisation}")
+        public ResponseEntity<Cotisation> addUserToCotisation(@PathVariable int idCotisation, @RequestBody Utilisateur utilisateur) throws Exception {
+            cotisationService.addUserToCotisation(idCotisation, utilisateur.getIdUtilisateur());
+    
+            Cotisation cotisation = cotisationRepository.findById(idCotisation).orElseThrow(() -> new Exception("Cotisation introuvable"));
+    
+            return ResponseEntity.ok(cotisation);
+        }
+
+
     //Lire un user spécifique
     @GetMapping("/read/{id}")
     public ResponseEntity<?> getCotisationById(@PathVariable Integer id) {
         return cotisationService.findById(id);
     }
 
+
+    //Recuperer la liste des cotisation creér par un user 
+    @GetMapping("/list/{idUtilisateur}")
+    @Operation(summary = "affichage des cotisations à travers l'id de utilisateur")
+    public ResponseEntity<List<Cotisation>> listeCategorieByUseur(@PathVariable Integer idUtilisateur){
+        return  new ResponseEntity<>(cotisationService.getAllCotisationByUtilisateur(idUtilisateur), HttpStatus.OK);
+    }
 
         //Supprimer un utilisateur
     // @Operation(summary = "Supprimer un utilisateur par son ID")

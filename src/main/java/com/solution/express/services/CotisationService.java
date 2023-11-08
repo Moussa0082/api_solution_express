@@ -25,42 +25,16 @@ import com.solution.express.models.Utilisateur;
 import com.solution.express.repository.CotisationRepository;
 import com.solution.express.repository.UtilisateurRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class CotisationService {
 
     @Autowired
     private CotisationRepository cotisationRepository;
 
-    //   public Cotisation createCotisation(Cotisation cotisation, MultipartFile imageFile, Utilisateur utilisateur) throws Exception {
-       
-    //     Utilisateur ut = utilisateurRepository.findByIdUtilisateur(cotisation.getUtilisateur().)
-    //     if (cotisationRepository.findByNom(cotisation.getNom()) == null){
-    //         cotisation.setCreateur(utilisateur);
-    //         // Traitement du fichier image
-    //         if (imageFile != null) {
-    //             String imageLocation = "C:\\xampp\\htdocs\\solution_express";
-    //             try {
-    //                 Path imageRootLocation = Paths.get(imageLocation);
-    //                 if (!Files.exists(imageRootLocation)) {
-    //                     Files.createDirectories(imageRootLocation);
-    //                 }
-    
-    //                 String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
-    //                 Path imagePath = imageRootLocation.resolve(imageName);
-    //                 Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-    //                 cotisation.setImage("http://localhost/solution_express\\images" + imageName);
-    //             } catch (IOException e) {
-    //                 throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
-    //             }
-    //         }
-    
-
-    //         return cotisationRepository.save(cotisation);
-
-    //     } else {
-    //         throw new IllegalArgumentException("La cotisation " + cotisation.getNom() + " existe déjà");
-    //     }
-    // }
+    @Autowired
+    private UtilisateurRepository utilisateurRepositoy;
 
     public Cotisation createCotisation(Cotisation cotisation, MultipartFile imageFile) throws Exception {
         if (cotisationRepository.findByNom(cotisation.getNom()) == null) {
@@ -128,11 +102,18 @@ public class CotisationService {
     }
 
 
-    //Ajouter user à un groupe
+    public void addUserToCotisation(int cotisationId, int userId) throws Exception {
+        Cotisation cotisation = cotisationRepository.findById(cotisationId).orElseThrow(() -> new Exception("Cotisation introuvable"));
+        Utilisateur utilisateur = utilisateurRepositoy.findById(userId).orElseThrow(() -> new Exception("Utilisateur introuvable"));
 
-    // public ResponseEntity<String> addUserToCotisation(Cotisation cotisation, Utilisateur utilisateur){
-      
-    // }
+        if (cotisation.getUtilisateur().contains(utilisateur)) {
+            throw new Exception("L'utilisateur est déjà membre de la cotisation");
+        }
+
+        cotisation.getUtilisateur().add(utilisateur);
+        cotisationRepository.save(cotisation);
+    }
+
 
 
     //recuperer la liste des ueser
@@ -143,6 +124,19 @@ public class CotisationService {
             throw new NoContentException("Aucune cotisation trouvé");
         return cotisation;
     }
+
+    //Recuperer la cotisation par utilisateur
+    public List<Cotisation> getAllCotisationByUtilisateur(Integer idUtilisateur){
+        List<Cotisation>  cotisation = cotisationRepository.findByUtilisateurIdUtilisateur(idUtilisateur);
+
+        if(cotisation.isEmpty()){
+            throw new EntityNotFoundException("Aucune cotisation trouvé");
+        }
+
+        return cotisation;
+    }
+
+    
 
 
 
@@ -159,16 +153,6 @@ public class CotisationService {
    }
    
 
-   //Ajouter user à une cotisation
-     @Autowired
-    private UtilisateurRepository utilisateurRepository;
-
-    // public Cotisation addUserToCotisation(Cotisation cotisation) throws Exception {
-     
-    //     Utilisateur utilisateur = utilisateurRepository.findByIdUtilisateur(cotisation.getUtilisateur());
-
-        
-    // }
         
 
     //suppression d'une cotisation specifique 

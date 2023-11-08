@@ -13,7 +13,8 @@ public interface CotisationRepository  extends JpaRepository<Cotisation,Integer>
    Cotisation findCotisationByUtilisateurAndNom(Utilisateur utilisateur, String nom);
 
    public Cotisation findByNom(String nom);
-
+  
+   List<Cotisation> findByUtilisateurIdUtilisateur(Integer idUtilisateur);
    
 
 }
