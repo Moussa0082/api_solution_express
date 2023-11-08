@@ -68,9 +68,7 @@ public class DemandeService {
         }
     
         // Vérifier si une demande du même type existe déjà pour cet utilisateur
-    
-        // TypeBanque typeBanque = typeBanqueRepository.findTypeBanqueBy 
-        // TypeBanque typeBanque = typeBanqueRepository.findById(demande.getTypeBanque().getIdTypeBanque());
+            
         Demande existingDemande = demandeRepository.findByTypeBanqueAndUtilisateur(demande.getTypeBanque(), user);
         if (existingDemande != null) {
             throw new IllegalArgumentException("Une demande de ce type existe déjà pour l'utilisateur avec l'email" + demande.getUtilisateur().getEmail());
@@ -121,22 +119,21 @@ public class DemandeService {
         demande.setHeureDemande(localTime.toString());
     
         // Set the user's information to the demande's user fields
-        // demande.setUtilisateur(user);
-    
+        demande.setUtilisateur(user);
+
+        String dateDemande;
+        LocalDate localDate2 = LocalDate.now();
+        dateDemande = localDate2.toString();
         // Save the demande to the database
         Demande savedDemande = demandeRepository.save(demande);
         String msg_a = "Votre tentative demande de " + demande.getTypeBanque().getNom() +
                 " a été envoyée avec succès " + "\n" +
                 " Veuillez patienter le temps qu'un de nos agents s'occupe de traitement \n de votre demande.";
-        Alerte alerte = new Alerte();
-           alerte.setUtilisateur(demande.getUtilisateur()); 
-            alerte.setMesage(msg_a);
-             alerte.setSujet("Alerte Reception de demande"); 
-             alerte.setDate(localDate.toString()); 
+        Alerte alerte = new Alerte(0, demande.getUtilisateur().getEmail(), msg_a, "Alerte reception de demande", dateDemande, user);
               
              emailService.sendSimpleMail(alerte);
     
-        alerteRepository.save(alerte);
+             alerteRepository.save(alerte);
     
         // Envoyer une alerte de succès
         // Utilisez un service d'alerte pour envoyer une notification à l'utilisateur.
@@ -246,23 +243,27 @@ public class DemandeService {
     //         throw new NoContentException("Aucune demande trouvé");
     //     return demandes;
     // }
-    public ResponseEntity<List<Demande>> getAllDemande() {
-        try {
-            List<Demande> demandes = demandeRepository.findAll();
-            return new ResponseEntity<>(demandes, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
-        }
-    }
 
-     public List<Demande> lireParUser(Integer idUtilisateur){
-        List<Demande> demandes = demandeRepository.findByUtilisateurIdUtilisateur(idUtilisateur);
-        if (demandes.isEmpty())
-            throw new EntityNotFoundException("Aucune demande trouvée");
-        return demandes;
 
-    }
+    //////////
+
+    // public ResponseEntity<List<Demande>> getAllDemande() {
+    //     try {
+    //         List<Demande> demandes = demandeRepository.findAll();
+    //         return new ResponseEntity<>(demandes, HttpStatus.OK);
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+    //     }
+    // }
+
+    //  public List<Demande> lireParUser(Integer idUtilisateur){
+    //     List<Demande> demandes = demandeRepository.findByUtilisateurIdUtilisateur(idUtilisateur);
+    //     if (demandes.isEmpty())
+    //         throw new EntityNotFoundException("Aucune demande trouvée");
+    //     return demandes;
+
+    // }
 
 
     //Get user byID

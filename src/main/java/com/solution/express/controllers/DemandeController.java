@@ -74,44 +74,52 @@ public class DemandeController {
     //     }
     // }
 
-       @PostMapping("/send/{idUtilisateur}")
-       public ResponseEntity<Demande> createDemande(
+    @PostMapping("/send")
+public ResponseEntity<Demande> createDemande(
         @Valid @RequestParam("demande") String demandeString,
         @RequestParam(value = "image1", required = false) MultipartFile imageFile1,
-        @RequestParam(value = "image2", required = false) MultipartFile imageFile2,
-        @PathVariable("idUtilisateur") int idUtilisateur) throws Exception {
+        @RequestParam(value = "image2", required = false) MultipartFile imageFile2) throws Exception {
 
     // Récupérer l'utilisateur à partir de l'ID de l'utilisateur
-    Utilisateur user = utilisateurRepository.findById(idUtilisateur)
-            .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouver: " + idUtilisateur));
-             Demande demande = new Demande();
-        try {
-            demande = new JsonMapper().readValue(demandeString, Demande.class);
-        } catch (JsonProcessingException e) {
-            throw new Exception(e.getMessage());
-        }
+    Utilisateur user = null;
+    try {
+        Demande demande = new JsonMapper().readValue(demandeString, Demande.class);
+        user = utilisateurRepository.findById(demande.getUtilisateur().getIdUtilisateur())
+                .orElseThrow(() -> new Exception("Utilisateur non trouvé"));
 
-    Demande savedDemande = demandeService.createDemande(demande, imageFile1, imageFile2, user);
-
-    return new ResponseEntity<>(savedDemande, HttpStatus.CREATED);
+        // Enregistrer la demande
+        Demande savedDemande = demandeService.createDemande(demande, imageFile1, imageFile2, user);
+        return new ResponseEntity<>(savedDemande, HttpStatus.CREATED);
+    } catch (JsonProcessingException e) {
+        throw new Exception(e.getMessage());
     }
+    //  catch (Exception e) {
+    //     if (user == null) {
+    //         return new ResponseEntity<>("Utilisateur non trouvé", HttpStatus.NOT_FOUND);
+    //     } else {
+    //         throw e;
+    //     }
+    // }
+
+}
+ ///////////////
+
+    // @GetMapping("/list/{idUtilisateur}")
+    // @Operation(summary = "Affichage la liste  des demandes A  travers l'id de l'utilisateur")
+    // public ResponseEntity<List<Demande>> listeDemandeByUser(@PathVariable Integer idUtilisateur){
+    //     return  new ResponseEntity<>(demandeService.lireParUser(idUtilisateur),HttpStatus.OK);
+    // }
 
 
-    @GetMapping("/list/{idUtilisateur}")
-    @Operation(summary = "Affichage la liste  des demandes A  travers l'id de l'utilisateur")
-    public ResponseEntity<List<Demande>> listeDemandeByUser(@PathVariable Integer idUtilisateur){
-        return  new ResponseEntity<>(demandeService.lireParUser(idUtilisateur),HttpStatus.OK);
-    }
-
-
-    @GetMapping("/read")
-    public ResponseEntity<List<Demande>> getAllDemande() {
-        return demandeService.getAllDemande();
-    }
+    // @GetMapping("/read")
+    // public ResponseEntity<List<Demande>> getAllDemande() {
+    //     return demandeService.getAllDemande();
+    // }
 
 
        
     //Lire un user spécifique
+
     @GetMapping("/read/{id}")
     public ResponseEntity<?> getDemandeById(@PathVariable Integer id) {
         return demandeService.findById(id);

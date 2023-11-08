@@ -14,5 +14,6 @@ public interface CotisationRepository  extends JpaRepository<Cotisation,Integer>
 
    public Cotisation findByNom(String nom);
 
+   
 
 }

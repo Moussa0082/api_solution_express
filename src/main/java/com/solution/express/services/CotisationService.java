@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.solution.express.Exceptions.NoContentException;
+import com.solution.express.models.Banque;
 import com.solution.express.models.Cotisation;
 import com.solution.express.models.Utilisateur;
 import com.solution.express.repository.CotisationRepository;
@@ -28,13 +31,43 @@ public class CotisationService {
     @Autowired
     private CotisationRepository cotisationRepository;
 
-      public Cotisation createCotisation(Cotisation cotisation, MultipartFile imageFile) throws Exception {
-        // Utilisateur utilisateur;
-        
-        if (cotisationRepository.findByNom(cotisation.getNom()) == null){
-            // Traitement du fichier image
-            if (imageFile != null) {
-                String imageLocation = "C:\\xampp\\htdocs\\solution_express";
+    //   public Cotisation createCotisation(Cotisation cotisation, MultipartFile imageFile, Utilisateur utilisateur) throws Exception {
+       
+    //     Utilisateur ut = utilisateurRepository.findByIdUtilisateur(cotisation.getUtilisateur().)
+    //     if (cotisationRepository.findByNom(cotisation.getNom()) == null){
+    //         cotisation.setCreateur(utilisateur);
+    //         // Traitement du fichier image
+    //         if (imageFile != null) {
+    //             String imageLocation = "C:\\xampp\\htdocs\\solution_express";
+    //             try {
+    //                 Path imageRootLocation = Paths.get(imageLocation);
+    //                 if (!Files.exists(imageRootLocation)) {
+    //                     Files.createDirectories(imageRootLocation);
+    //                 }
+    
+    //                 String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+    //                 Path imagePath = imageRootLocation.resolve(imageName);
+    //                 Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+    //                 cotisation.setImage("http://localhost/solution_express\\images" + imageName);
+    //             } catch (IOException e) {
+    //                 throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
+    //             }
+    //         }
+    
+
+    //         return cotisationRepository.save(cotisation);
+
+    //     } else {
+    //         throw new IllegalArgumentException("La cotisation " + cotisation.getNom() + " existe déjà");
+    //     }
+    // }
+
+    public Cotisation createCotisation(Cotisation cotisation, MultipartFile imageFile) throws Exception {
+        if (cotisationRepository.findByNom(cotisation.getNom()) == null) {
+            // Le reste de du code pour traiter l'image et enregistrer la cotisation
+                  if (imageFile != null) {
+                String imageLocation = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                // String imageLocation = "C:\\xampp\\htdocs\\solution_express";
                 try {
                     Path imageRootLocation = Paths.get(imageLocation);
                     if (!Files.exists(imageRootLocation)) {
@@ -44,14 +77,15 @@ public class CotisationService {
                     String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                     Path imagePath = imageRootLocation.resolve(imageName);
                     Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-                    cotisation.setImage("http://localhost/solution_express\\images" + imageName);
+                    cotisation.setImage("http://localhost/solution/" + imageName);
                 } catch (IOException e) {
                     throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
                 }
             }
-    
-         
-    
+             LocalDate localDate = LocalDate.now();
+             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+             dateFormat.format(localDate);
+             cotisation.setDateCreation(localDate.toString());
             return cotisationRepository.save(cotisation);
         } else {
             throw new IllegalArgumentException("La cotisation " + cotisation.getNom() + " existe déjà");
@@ -66,6 +100,7 @@ public class CotisationService {
 
             // Mettre à jour les champs
             cotisationExistant.setNom(cotisation.getNom());
+            cotisationExistant.setFrais(cotisation.getFrais());
             cotisationExistant.setDescription(cotisation.getDescription());
             cotisationExistant.setDateCreation(cotisation.getDateCreation());
             cotisationExistant.setDateFin(cotisation.getDateFin());
@@ -91,6 +126,13 @@ public class CotisationService {
 
         } 
     }
+
+
+    //Ajouter user à un groupe
+
+    // public ResponseEntity<String> addUserToCotisation(Cotisation cotisation, Utilisateur utilisateur){
+      
+    // }
 
 
     //recuperer la liste des ueser
@@ -121,22 +163,15 @@ public class CotisationService {
      @Autowired
     private UtilisateurRepository utilisateurRepository;
 
-    public Cotisation ajouterUtilisateurCotisation(int idCotisation, int idUtilisateur) throws Exception{
-        Cotisation cotisation = cotisationRepository.findById(idCotisation).orElseThrow(() -> new Exception("Cotisation introuvable"));
-        // Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur).orElseThrow(() -> new Exception("Utilisateur introuvable"));
-        // if (cotisation.getUtilisateurs().contains(utilisateur)) {
-        //     throw new UtilisateurDejaMembreException("L'utilisateur est déjà membre de la cotisation");
-        // }
-
-        // cotisation.setUtilisateur(cotisation.getUtilisateur());
-        return cotisationRepository.save(cotisation);
-    }
+    // public Cotisation addUserToCotisation(Cotisation cotisation) throws Exception {
+     
+    //     Utilisateur utilisateur = utilisateurRepository.findByIdUtilisateur(cotisation.getUtilisateur());
 
         
-    
+    // }
         
 
-    //suppression d'un user specifique 
+    //suppression d'une cotisation specifique 
     public String deleteCotisation(Integer id) {
         Optional <Cotisation> cotisation = cotisationRepository.findById(id);
          if (cotisation.isPresent()) {
@@ -148,5 +183,8 @@ public class CotisationService {
          }
      }
 
+
+   
+     
     
 }

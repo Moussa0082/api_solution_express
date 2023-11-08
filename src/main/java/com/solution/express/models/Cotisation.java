@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -28,10 +29,10 @@ public class Cotisation {
     @Id
     private int idCotisation;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    // @Temporal(TemporalType.DATE)
+    // @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = true)
-    private Date dateCreation;
+    private String dateCreation;
 
     @Column(nullable = false)
     private String nom;
@@ -42,17 +43,21 @@ public class Cotisation {
     @Column(nullable = false)
     private String description;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    // @Temporal(TemporalType.DATE)
+    // @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = true)
-    private Date dateDebut;
+    private String dateDebut;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    // @Temporal(TemporalType.DATE)
+    // @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = true)
-    private Date dateFin;
+    private String dateFin;
 
     private String image;
+
+
+    @ManyToOne
+    private Utilisateur createur;
 
     // //Liaison User aux cotisation
     @ManyToMany
