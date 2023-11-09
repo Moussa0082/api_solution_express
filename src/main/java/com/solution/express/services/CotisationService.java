@@ -116,7 +116,7 @@ public class CotisationService {
 
 
 
-    //recuperer la liste des ueser
+    //recuperer la liste des user
         public List<Cotisation> getAllCotisation(){
 
         List<Cotisation> cotisation = cotisationRepository.findAll();

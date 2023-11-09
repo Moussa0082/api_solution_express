@@ -24,7 +24,7 @@ public class Evenement {
     private int idEvenement;
     
     @Column(nullable = false)
-    private String nomEvenment;
+    private String nomEvenement;
     
     @Column(nullable = false)
     private String descriptionEvenment;
@@ -35,7 +35,7 @@ public class Evenement {
 
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date dateEvenement;
+    private String dateEvenement;
     
     @Temporal(TemporalType.TIME)
     @JsonFormat(pattern = "HH:mm")

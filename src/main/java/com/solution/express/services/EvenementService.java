@@ -9,9 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.solution.express.models.Cotisation;
 import com.solution.express.models.Evenement;
 import com.solution.express.models.SuperAdmin;
 import com.solution.express.repository.EvenementRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class EvenementService {
@@ -20,57 +23,70 @@ public class EvenementService {
     private EvenementRepository evenementRepository;
 
     //Methode pour créer un super admin 
-    //  public ResponseEntity<String> createEventnement(Evenement evenement) {
-    //      if (evenementRepository.findByNomAndDateEvenement(evenement.getNomEvenment()) == null) && evenement.getDateEvenement()==null) {
-    //          evenementRepository.save(evenement);
+     public ResponseEntity<String> createEvenement(Evenement evenement) {
+         if (evenementRepository.findByNomAndDateEvenement(evenement.getNomEvenement(), evenement.getDateEvenement())) {
+             evenementRepository.save(evenement);
 
-    //          return new ResponseEntity<>("Evenement jouter avec succès", HttpStatus.CREATED);
-    //         } else {
+             return new ResponseEntity<>("Evenement jouter avec succès", HttpStatus.CREATED);
+            } else {
                 
-    //             return new ResponseEntity<>("Cet evenement existe déjà.", HttpStatus.BAD_REQUEST);
-    //      }
-     
+                return new ResponseEntity<>("L'evenement "+ evenement.getNomEvenement() + "ne peut pas etre ajouter" + "2 fois à la meme date le" + evenement.getDateEvenement() , HttpStatus.BAD_REQUEST);
+         }
+        }
         
        
     // }
 
-    //Modifier super admin methode
-//     public SuperAdmin updateSuperAdmin(Integer id, SuperAdmin superAdmin) {
-//         return superAdminRepository.findById(id)
-//                 .map(sa -> {
-//                     sa.setNom(superAdmin.getNom());
-//                     sa.setPrenom(superAdmin.getPrenom());
-//                     sa.setEmail(superAdmin.getEmail());
-//                     sa.setMotDePasse(superAdmin.getMotDePasse());
-//                     return superAdminRepository.save(sa);
-//                 }).orElseThrow(() -> new RuntimeException(("Super Admin non existant avec l'ID " + id)));
+    //Modifier evenement methode
+    public Evenement updateEvenement(Integer id, Evenement evenement) {
+        return evenementRepository.findById(id)
+                .map(ev -> {
+                    ev.setNomEvenement(evenement.getNomEvenement());
+                    ev.setDescriptionEvenment(evenement.getDescriptionEvenment());
+                    ev.setLieuEvenement(evenement.getLieuEvenement());
+                    ev.setDateEvenement(evenement.getDateEvenement());
+                    ev.setHeureEvenement(evenement.getHeureEvenement());
+                    return evenementRepository.save(ev);
+                }).orElseThrow(() -> new RuntimeException(("Evenement non existant avec l'ID " + id)));
     
-//     }
-    
+    }
 
 
+      //Recuperer la cotisation par utilisateur
+    // public List<Evenement> getAllEvenemenetByUtilisateur(Integer idUtilisateur){
+    //     List<Evenement>  evenement = evenementRepository.findEvenementByUtilisateurAndEvenement(idUtilisateur, evenement.getNom);
 
-//     //Recuperer la liste des superAdmins
-//       public ResponseEntity<List<SuperAdmin>> getAllSuperAdmin() {
+    //     if(cotisation.isEmpty()){
+    //         throw new EntityNotFoundException("Aucune cotisation trouvé");
+    //     }
+
+    //     return cotisation;
+    // }
+
+
+    //Recuperer la liste des superAdmins
+      public ResponseEntity<List<Evenement>> getAllEvenement() {
      
-//        try {
-//             return new ResponseEntity<>(superAdminRepository.findAll(), HttpStatus.OK);
-//         } catch (Exception e) {
-//              e.printStackTrace();
-//         }
-//        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
-//     }
+       try {
+            return new ResponseEntity<>(evenementRepository.findAll(), HttpStatus.OK);
+        } catch (Exception e) {
+             e.printStackTrace();
+        }
+       return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+    }
 
 //       //suppression d'un super admin specifique 
-//     public String deleteSuperAdmin(Integer id) {
-//         Optional <SuperAdmin> superadmin = superAdminRepository.findById(id);
-//          if (superadmin.isPresent()) {
-//              superAdminRepository.deleteById(id);
-//              return "Super Admin supprimé avec succès.";
-//          } else {
+    public String deleteSuperAdmin(Integer id) {
+        Optional <Evenement> evenement = evenementRepository.findById(id);
+         if (evenement.isPresent()) {
+             evenementRepository.deleteById(id);
+             return "Evenement supprimé avec succès.";
+         } else {
            
-//              return "Super Admin non existant.";
-//          }
-//      }
-    
+             return "Evenement non existant.";
+         }
+     }
+
+
+
 }
