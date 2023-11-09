@@ -33,7 +33,7 @@ public class TypeBanqueService {
     @Autowired
     private BanqueRepository banqueRepository;
 
-    // Doublons corriger 
+    
     public TypeBanque createTypeBanque(TypeBanque typeBanque, MultipartFile imageFile) throws Exception {
 
         // Verifie si la banque existe

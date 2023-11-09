@@ -43,8 +43,7 @@ public class CotisationController {
     @Autowired
     private CotisationRepository cotisationRepository;
 
-      //Create user
-    // @PostMapping("/create/user/{utilisateurId}")
+     
     // @Operation(summary = "Création d'une cotisation")
         @PostMapping("/create")
     public ResponseEntity<Cotisation> createCotisation(
@@ -65,34 +64,7 @@ public class CotisationController {
         return new ResponseEntity<>(savedCotisation, HttpStatus.CREATED);
     }
 
-    // @PostMapping("/create")
-    // public ResponseEntity<Cotisation> createCotisationWithUser(
-    //     @Valid @RequestParam("cotisation") String cotisationString,
-    //     @RequestParam(value = "image", required = false) MultipartFile imageFile) {
-    //     try {
-    //         Cotisation cotisation = new JsonMapper().readValue(cotisationString, Cotisation.class);
-    //         Cotisation createdCotisation = cotisationService.createCotisationWithUser(cotisation, imageFile);
-    //         return new ResponseEntity<>(createdCotisation, HttpStatus.CREATED);
-    //     } catch (Exception e) {
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
-
-    
-    // public ResponseEntity<Cotisation> createCotisationWithUser(
-    // @Valid @RequestBody Cotisation cotisation,
-    // @RequestParam(value = "image", required = false) MultipartFile imageFile,
-    // @PathVariable("utilisateurId") Integer utilisateurId) {
-    // try {
-    //     Utilisateur utilisateur = utilisateurRepository.findById(utilisateurId)
-    //             .orElseThrow(() -> new Exception("Utilisateur non trouvé avec l'ID : " + utilisateurId));
-
-    //     Cotisation newCotisation = cotisationService.createCotisation(cotisation, imageFile, utilisateur);
-
-    //     return new ResponseEntity<>(newCotisation, HttpStatus.CREATED);
-    // } catch (Exception e) {
-    //     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    // }}
+   
      
     //Mettre à jour un user
       @PutMapping("/update/{id}")
@@ -156,11 +128,11 @@ public class CotisationController {
       Optional <Cotisation> cotisation = cotisationRepository.findById(id);
       if (cotisation.isPresent()) {
           cotisationRepository.deleteById(id);
-          cotisationService.deleteCotisation(id);  
-          return "Super Admin supprimé avec succès.";
+          cotisationService.deleteCotisation(id); 
+          return "Cotisation supprimé avec succès.";
       } else {
         
-          return "Super Admin non existant avec l'ID " + id;
+          return "Cotisation non existant avec l'ID " + id;
       }
     }
 

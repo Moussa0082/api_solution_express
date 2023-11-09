@@ -1,17 +1,31 @@
 package com.solution.express.services;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.solution.express.Exceptions.BadRequestException;
+import com.solution.express.models.Banque;
 import com.solution.express.models.Cotisation;
 import com.solution.express.models.Evenement;
 import com.solution.express.models.SuperAdmin;
+import com.solution.express.models.TypeBanque;
+import com.solution.express.models.Utilisateur;
+import com.solution.express.repository.CotisationRepository;
 import com.solution.express.repository.EvenementRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -22,20 +36,68 @@ public class EvenementService {
     @Autowired
     private EvenementRepository evenementRepository;
 
-    //Methode pour créer un super admin 
-     public ResponseEntity<String> createEvenement(Evenement evenement) {
-         if (evenementRepository.findByNomAndDateEvenement(evenement.getNomEvenement(), evenement.getDateEvenement())) {
-             evenementRepository.save(evenement);
+  @Autowired
+  private CotisationRepository cotisationRepository;
 
-             return new ResponseEntity<>("Evenement jouter avec succès", HttpStatus.CREATED);
-            } else {
-                
-                return new ResponseEntity<>("L'evenement "+ evenement.getNomEvenement() + "ne peut pas etre ajouter" + "2 fois à la meme date le" + evenement.getDateEvenement() , HttpStatus.BAD_REQUEST);
-         }
+
+        // public Evenement createEvenement(Evenement evenement) throws Exception {
+        //     Cotisation co = cotisationRepository.findByCreateurAndIdCotisation(evenement.getCotisation().getCreateur(), evenement.getCotisation().getIdCotisation());
+        //     // if( co == null ){
+
+        //     //   evenementRepository.save(evenement);
+        //     // }
+        //     if (evenement.getCotisation() != null && evenement.getCotisation().getCreateur() != null) {
+        //         Cotisation cos = cotisationRepository.findByCreateurAndIdCotisation(
+        //             evenement.getCotisation().getCreateur(),
+        //             evenement.getCotisation().getIdCotisation()
+        //         );
+        
+        //         if (cos == null) {
+        //             evenementRepository.save(evenement);
+        //         }
+        //     }
+        
+        //     return evenement;
+            
+        // }
+ 
+        // public Evenement createEvenement(Evenement evenement, Cotisation cotisation) throws Exception {
+        //     // Récupérer la Cotisation associée à l'Evenement
+        //     // Cotisation cotisations = evenement.getCotisation();
+            
+        //     // Vérifier si la Cotisation existe déjà dans la base de données
+        //     Cotisation existingCotisation = cotisationRepository.findById(evenement.getCotisation().getIdCotisation()).orElse(null);
+        
+        //     if (existingCotisation == null) {
+        //         // Si la Cotisation n'existe pas, enregistrer la Cotisation et l'Evenement
+        //         // cotisationRepository.save(cotisation);
+        //         // evenementRepository.save(evenement);
+        //         throw new BadRequestException("La Cotisation avec l'ID " + cotisation.getIdCotisation() + " n'existe pas.");
+
+        //     } else {
+        //         // Si la Cotisation existe, associer l'Evenement à cette Cotisation existante
+        //         evenement.setCotisation(existingCotisation);
+        //         evenementRepository.save(evenement);
+        //     }
+        
+        //     return evenement;
+        // }
+
+         public Evenement createEvenement(Evenement evenement) throws Exception {
+
+        // Verifie si la banque existe
+        Cotisation cotisation = cotisationRepository.findById(evenement.getCotisation().getIdCotisation())
+                .orElseThrow(() -> new IllegalArgumentException("Banque non trouver: " + evenement.getCotisation().getIdCotisation()));
+    
+        Optional<Evenement> existingEvenement = evenementRepository.findByDateEvenement(evenement.getDateEvenement());
+        if (existingEvenement.isPresent()) {
+            throw new IllegalArgumentException("L'evenement " + existingEvenement.get().getNomEvenement() + " existe déjà le meme jour");
         }
+        return evenement;
+    
+         }
         
        
-    // }
 
     //Modifier evenement methode
     public Evenement updateEvenement(Integer id, Evenement evenement) {
@@ -52,19 +114,19 @@ public class EvenementService {
     }
 
 
-      //Recuperer la cotisation par utilisateur
-    // public List<Evenement> getAllEvenemenetByUtilisateur(Integer idUtilisateur){
-    //     List<Evenement>  evenement = evenementRepository.findEvenementByUtilisateurAndEvenement(idUtilisateur, evenement.getNom);
+        //Recuperer la cotisation par utilisateur
+        // public List<Evenement> getAllEvenemenetByUtilisateur(Integer idUtilisateur){
+        // List<Evenement>  evenement = evenementRepository.findByUtilisateurIdUtilisateur(idUtilisateur);
 
-    //     if(cotisation.isEmpty()){
-    //         throw new EntityNotFoundException("Aucune cotisation trouvé");
-    //     }
+        // if(evenement.isEmpty()){
+        //     throw new EntityNotFoundException("Aucun evenement trouvé");
+        // }
 
-    //     return cotisation;
-    // }
+        // return evenement;
+        // }
 
 
-    //Recuperer la liste des superAdmins
+    //Recuperer la liste des evenement
       public ResponseEntity<List<Evenement>> getAllEvenement() {
      
        try {
@@ -75,8 +137,19 @@ public class EvenementService {
        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 
+    public ResponseEntity<?> findById(Integer id) {
+
+        Optional<Evenement> evenement = evenementRepository.findById(id);
+    
+        if (evenement.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evenement avec l'ID " + id + " n'existe pas");
+        }
+    
+        return ResponseEntity.ok(evenement.get());     
+       }
+
 //       //suppression d'un super admin specifique 
-    public String deleteSuperAdmin(Integer id) {
+    public String deleteEvenement(Integer id) {
         Optional <Evenement> evenement = evenementRepository.findById(id);
          if (evenement.isPresent()) {
              evenementRepository.deleteById(id);

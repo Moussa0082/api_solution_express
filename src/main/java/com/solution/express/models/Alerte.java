@@ -51,5 +51,13 @@ public class Alerte {
     @ManyToOne
     @JoinColumn(name = "idUtilisateur")
     private Utilisateur utilisateur;
+
+    public Alerte(Utilisateur utilisateur,String email, String mesage, String sujet, String date){
+      this.utilisateur = utilisateur;
+      this.email = email;
+      this.mesage = mesage;
+      this.sujet = sujet;
+      this.date = date;
+    }
     
 }

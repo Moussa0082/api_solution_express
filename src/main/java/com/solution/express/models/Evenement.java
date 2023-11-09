@@ -33,22 +33,26 @@ public class Evenement {
     private String lieuEvenement;
 
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    // @Temporal(TemporalType.DATE)
+    // @JsonFormat(pattern = "dd-MM-yyyy")
     private String dateEvenement;
     
-    @Temporal(TemporalType.TIME)
-    @JsonFormat(pattern = "HH:mm")
-    private Date heureEvenement;
+    // @Temporal(TemporalType.TIME)
+    // @JsonFormat(pattern = "HH:mm")
+    private String heureEvenement;
 
 
     // //Liaison du user au rapport pour voir le user qui a elaborer le rapport
-    @ManyToOne
-    @JoinColumn(name = "idUtilisateur")
-    private Utilisateur utilisateur;
+    // @ManyToOne
+    // @JoinColumn(name = "idUtilisateur")
+    // private Utilisateur utilisateur;
     
     @ManyToOne
     @JoinColumn(name = "idCotisation")
     private Cotisation cotisation;
+    
+    // @ManyToOne
+    // @JoinColumn(name = "idCreateurCotisation")
+    // private Cotisation createur;
     
 }

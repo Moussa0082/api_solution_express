@@ -71,7 +71,8 @@ public class DemandeService {
             
         Demande existingDemande = demandeRepository.findByTypeBanqueAndUtilisateur(demande.getTypeBanque(), user);
         if (existingDemande != null) {
-            throw new IllegalArgumentException("Une demande de ce type existe déjà pour l'utilisateur avec l'email" + demande.getUtilisateur().getEmail());
+            throw new IllegalArgumentException("Une demande de ce type existe déjà pour l'utilisateur avec l'email " + existingDemande.getUtilisateur().getEmail());
+            
         }
     
         demande.setNumeroDemande(numeroDemande);
@@ -126,10 +127,10 @@ public class DemandeService {
         dateDemande = localDate2.toString();
         // Save the demande to the database
         Demande savedDemande = demandeRepository.save(demande);
-        String msg_a = "Votre tentative demande de " + demande.getTypeBanque().getNom() +
+        String msg_a = "Votre  demande de " + demande.getTypeBanque().getNom() +
                 " a été envoyée avec succès " + "\n" +
                 " Veuillez patienter le temps qu'un de nos agents s'occupe de traitement \n de votre demande.";
-        Alerte alerte = new Alerte(0, demande.getUtilisateur().getEmail(), msg_a, "Alerte reception de demande", dateDemande, user);
+        Alerte alerte = new Alerte(user,demande.getUtilisateur().getEmail(), msg_a, "Alerte reception de demande", dateDemande);
               
              emailService.sendSimpleMail(alerte);
     

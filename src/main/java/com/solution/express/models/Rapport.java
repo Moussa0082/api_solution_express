@@ -38,12 +38,16 @@ public class Rapport {
     private String message;
 
     //Liaison du user au rapport pour voir le user qui a elaborer le rapport
-    @ManyToOne
-    @JoinColumn(name = "idUtilisateur")
-    private Utilisateur utilisateur;
+    // @ManyToOne
+    // @JoinColumn(name = "idUtilisateur")
+    // private Utilisateur utilisateur;
 
     @ManyToOne
     @JoinColumn(name = "idCotisation")
     private Cotisation cotisation;
 
+    
+    // @ManyToOne
+    // @JoinColumn(name = "idCreateurCotisation")
+    // private Cotisation createur;
 }

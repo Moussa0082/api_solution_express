@@ -81,7 +81,8 @@ public ResponseEntity<Demande> createDemande(
         @RequestParam(value = "image2", required = false) MultipartFile imageFile2) throws Exception {
 
     // Récupérer l'utilisateur à partir de l'ID de l'utilisateur
-    Utilisateur user = null;
+    Utilisateur user ;
+    
     try {
         Demande demande = new JsonMapper().readValue(demandeString, Demande.class);
         user = utilisateurRepository.findById(demande.getUtilisateur().getIdUtilisateur())
@@ -93,13 +94,7 @@ public ResponseEntity<Demande> createDemande(
     } catch (JsonProcessingException e) {
         throw new Exception(e.getMessage());
     }
-    //  catch (Exception e) {
-    //     if (user == null) {
-    //         return new ResponseEntity<>("Utilisateur non trouvé", HttpStatus.NOT_FOUND);
-    //     } else {
-    //         throw e;
-    //     }
-    // }
+
 
 }
  ///////////////
