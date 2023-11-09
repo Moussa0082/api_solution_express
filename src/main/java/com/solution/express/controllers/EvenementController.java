@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.solution.express.models.Alerte;
 import com.solution.express.models.Cotisation;
 import com.solution.express.models.Evenement;
 import com.solution.express.models.SuperAdmin;
@@ -24,6 +25,8 @@ import com.solution.express.models.Utilisateur;
 import com.solution.express.repository.CotisationRepository;
 import com.solution.express.repository.EvenementRepository;
 import com.solution.express.services.EvenementService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/event")
@@ -103,6 +106,8 @@ public class EvenementController {
     public Evenement updateEvenement(@PathVariable Integer id, @RequestBody Evenement evenement){
         return evenementService.updateEvenement(id, evenement);
     }
+
+      
 
     // Get Liste des super admin
       @GetMapping("/read")

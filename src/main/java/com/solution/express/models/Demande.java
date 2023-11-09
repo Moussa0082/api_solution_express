@@ -46,7 +46,7 @@ public class Demande {
 
     private String photoValide;
 
-    private Boolean statutDemande = false;
+    private String statutDemande = "reçue";
 
     @Column(nullable = false)
     private String numeroUser;

@@ -33,12 +33,13 @@ public class Alerte {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAlerte;
 
-    private String email;
-
     @NotEmpty
     @Email
-    @Size(max = 255)
-    @Column(unique = true)
+    private String email;
+
+    
+    // @Size(max = 255)
+    // @Column(unique = true)
     private String mesage;
 
     private String sujet;

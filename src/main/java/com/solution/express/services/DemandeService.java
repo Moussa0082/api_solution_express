@@ -68,11 +68,23 @@ public class DemandeService {
         }
     
         // Vérifier si une demande du même type existe déjà pour cet utilisateur
-            
+            String dateDemandeR;
+        LocalDate localDate2 = LocalDate.now();
+        dateDemandeR = localDate2.toString();
         Demande existingDemande = demandeRepository.findByTypeBanqueAndUtilisateur(demande.getTypeBanque(), user);
-        if (existingDemande != null) {
-            throw new IllegalArgumentException("Une demande de ce type existe déjà pour l'utilisateur avec l'email " + existingDemande.getUtilisateur().getEmail());
+
             
+        if (existingDemande != null) {
+            //Envoi email
+            String msg_aa = "Votre  demande de " + existingDemande.getTypeBanque().getNom() +
+            " a été envoyée déjà , elle est en cours de traitement " + "\n" +
+            " Veuillez patienter le temps qu'un de nos agents s'occupe de traitement \n de votre demande , essayer de ne pas renvoyer la même type de  demande.";
+            Alerte alerte = new Alerte(user,existingDemande.getUtilisateur().getEmail(), msg_aa, "Repetition de demande", dateDemandeR);
+            
+            emailService.sendSimpleMail(alerte);
+            
+            alerteRepository.save(alerte);
+            throw new IllegalArgumentException("Une demande de ce type existe déjà pour l'utilisateur avec l'email " + existingDemande.getUtilisateur().getEmail());
         }
     
         demande.setNumeroDemande(numeroDemande);
@@ -123,18 +135,18 @@ public class DemandeService {
         demande.setUtilisateur(user);
 
         String dateDemande;
-        LocalDate localDate2 = LocalDate.now();
-        dateDemande = localDate2.toString();
+        LocalDate localDate3 = LocalDate.now();
+        dateDemande = localDate3.toString();
         // Save the demande to the database
         Demande savedDemande = demandeRepository.save(demande);
-        String msg_a = "Votre  demande de " + demande.getTypeBanque().getNom() +
+        String msg_a = "Votre  demande de " + savedDemande.getTypeBanque().getNom() +
                 " a été envoyée avec succès " + "\n" +
                 " Veuillez patienter le temps qu'un de nos agents s'occupe de traitement \n de votre demande.";
-        Alerte alerte = new Alerte(user,demande.getUtilisateur().getEmail(), msg_a, "Alerte reception de demande", dateDemande);
+        Alerte alertes = new Alerte(user,demande.getUtilisateur().getEmail(), msg_a, "Alerte reception de demande", dateDemande);
               
-             emailService.sendSimpleMail(alerte);
+             emailService.sendSimpleMail(alertes);
     
-             alerteRepository.save(alerte);
+             alerteRepository.save(alertes);
     
         // Envoyer une alerte de succès
         // Utilisez un service d'alerte pour envoyer une notification à l'utilisateur.
