@@ -123,11 +123,11 @@ public ResponseEntity<Demande> createDemande(
 }
  ///////////////
 
-    // @GetMapping("/list/{idUtilisateur}")
-    // @Operation(summary = "Affichage la liste  des demandes A  travers l'id de l'utilisateur")
-    // public ResponseEntity<List<Demande>> listeDemandeByUser(@PathVariable Integer idUtilisateur){
-    //     return  new ResponseEntity<>(demandeService.lireParUser(idUtilisateur),HttpStatus.OK);
-    // }
+    @GetMapping("/list/{idUtilisateur}")
+    @Operation(summary = "Affichage la liste  des demandes A travers l'id de l'utilisateur")
+    public ResponseEntity<List<Demande>> listeDemandeByUser(@PathVariable Integer idUtilisateur){
+        return  new ResponseEntity<>(demandeService.lireParUser(idUtilisateur),HttpStatus.OK);
+    }
 
 
     // @GetMapping("/read")

@@ -16,14 +16,14 @@ public class AlerteService {
     private AlerteRepository alerteRepository;
 
 
-    //   public List<Alerte> getAlerteByUtilisateur(Integer idUtilisateur){
-    //     List<Alerte>  alerte = alerteRepository.findByUtilisateur(idUtilisateur);
+      public List<Alerte> getAlerteByUtilisateur(Integer idUtilisateur){
+        List<Alerte>  alerte = alerteRepository.findByUtilisateurIdUtilisateur(idUtilisateur);
 
-    //     if(alerte.isEmpty()){
-    //         throw new BadRequestException("Aucun evenement trouvé");
-    //     }
+        if(alerte.isEmpty()){
+            throw new BadRequestException("Aucun alerte trouvé");
+        }
 
-    //     return alerte;
-    //     }
+        return alerte;
+        }
     
 }

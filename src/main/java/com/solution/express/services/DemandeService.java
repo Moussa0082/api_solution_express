@@ -307,13 +307,13 @@ public class DemandeService {
     //     }
     // }
 
-    //  public List<Demande> lireParUser(Integer idUtilisateur){
-    //     List<Demande> demandes = demandeRepository.findByUtilisateurIdUtilisateur(idUtilisateur);
-    //     if (demandes.isEmpty())
-    //         throw new EntityNotFoundException("Aucune demande trouvée");
-    //     return demandes;
+     public List<Demande> lireParUser(Integer idUtilisateur){
+        List<Demande> demandes = demandeRepository.findByUtilisateurIdUtilisateur(idUtilisateur);
+        if (demandes.isEmpty())
+            throw new EntityNotFoundException("Aucune demande trouvée");
+        return demandes;
 
-    // }
+    }
 
     // public String validerDemande(int idDemande, int idAgent) throws Exception{
 
