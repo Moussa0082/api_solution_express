@@ -55,16 +55,7 @@ public class DemandeService {
      @Autowired
      private AgentRepository agentRepository;
 
-    // String msg_a = "Votre tentative de dépense de " + montantDepense +
-    // " Fcfa a été annulée car \nelle est supérieur au montant de votre budget actuel " + budgets.getMont_bud() + " Fcfa."  + "\n"+
-    // " Veuillez ajuster vos dépenses en conséquence.";
-    //      EmailDetails details = new EmailDetails(depense.getUser().getEmail(), msg_a, "Annulation de Dépense");
-    //  emailServiceImpl.sendSimpleMail(details);
-    //     return "Le montant de la dépense ne doit pas dépasser celui du budget.";
-
-
-    
-
+  //Faire demande
     public Demande createDemande(Demande demande, MultipartFile imageFile1, MultipartFile imageFile2, Utilisateur user) throws Exception {
             
         // Générer un numéro de demande aléatoire
@@ -185,8 +176,6 @@ public class DemandeService {
     
         //      alerteRepository.save(alertesa);
     
-        // Envoyer une alerte de succès
-        // Utilisez un service d'alerte pour envoyer une notification à l'utilisateur.
          return demande;
 
     }
@@ -204,86 +193,7 @@ public class DemandeService {
     }
     
 
-    // public Demande createDemande(Demande demande, MultipartFile imageFile1, MultipartFile imageFile2, Utilisateur user) throws Exception {
 
-    //     // Générer un numéro de demande aléatoire
-    //     int numeroDemande = (int) (Math.random() * 999) + 1;
-    //     String numeroDemandeFormate = String.format("%03d", numeroDemande);
-    //     while (demandeRepository.findByNumeroDemande(numeroDemandeFormate) != null) {
-    //         numeroDemande = (int) (Math.random() * 999) + 1;
-    //         numeroDemandeFormate = String.format("%03d", numeroDemande);
-    //     }
-    
-    //     // Vérifier si une demande du même type existe déjà pour cet utilisateur
-        
-    //     Demande existingDemande = demandeRepository.findByTypeBanqueAndUtilisateur(demande.getTypeBanque(), user);
-    //     if (existingDemande != null) {
-    //         throw new IllegalArgumentException("Une demande de ce type existe déjà pour cet utilisateur.");
-    //     }
-    
-    //     demande.setNumeroDemande(numeroDemandeFormate);
-    
-    //     // Traitement du fichier image 1
-    //        if (imageFile1 != null) {
-    //         String imageLocation = "C:\\xampp\\htdocs\\solution_express";
-    //         try {
-    //             Path imageRootLocation = Paths.get(imageLocation);
-    //             if (!Files.exists(imageRootLocation)) {
-    //                 Files.createDirectories(imageRootLocation);
-    //             }
-    
-    //             String imageName1 = UUID.randomUUID().toString() + "_" + imageFile1.getOriginalFilename();
-    //             Path imagePath1 = imageRootLocation.resolve(imageName1);
-    //             Files.copy(imageFile1.getInputStream(), imagePath1, StandardCopyOption.REPLACE_EXISTING);
-    //             demande.setPhotoDidentite(numeroDemandeFormate);
-    //         } catch (IOException e) {
-    //             throw new Exception("Erreur lors du traitement du fichier image 1 : " + e.getMessage());
-    //         }
-    //     }
-    
-    //     // Traitement du fichier image 2
-    //     if (imageFile2 != null) {
-    //         String imageLocation = "C:\\xampp\\htdocs\\solution_express";
-    //         try {
-    //             Path imageRootLocation = Paths.get(imageLocation);
-    //             if (!Files.exists(imageRootLocation)) {
-    //                 Files.createDirectories(imageRootLocation);
-    //             }
-    
-    //             String imageName2 = UUID.randomUUID().toString() + "_" + imageFile2.getOriginalFilename();
-    //             Path imagePath2 = imageRootLocation.resolve(imageName2);
-    //             Files.copy(imageFile2.getInputStream(), imagePath2, StandardCopyOption.REPLACE_EXISTING);
-    //             demande.setPhotoValide(numeroDemandeFormate);
-    //         } catch (IOException e) {
-    //             throw new Exception("Erreur lors du traitement du fichier image 2 : " + e.getMessage());
-    //         }
-    //     }
-    
-    //     // Set the current date and time to the demande's dateCreated and heureCreated fields
-    //     LocalDate localDate = LocalDate.now();
-    //     LocalTime localTime = LocalTime.now();
-    //     demande.setDateDemande(localDate.toString());
-    //     demande.setHeureDemande(localTime.toString());
-    
-    //     // Set the user's information to the demande's user fields
-    //     // demande.setUtilisateur(user);
-    
-    //     // Save the demande to the database
-    //     Demande savedDemande = demandeRepository.save(demande);
-    //       String msg_a = "Votre tentative demande  de " + demande.getTypeBanque().getNom() +
-    //         " a été envoyé avec succès " + "\n"+
-    //         " Veuillez patienter le temps qu'un de nos agent s'occupe de traitement \n de votre demande.";
-    //      Alerte alerte = new  Alerte(numeroDemande, demande.getUtilisateur().getEmail(), msg_a, "Alerte Reception de demande", numeroDemandeFormate, user);
-    //       emailService.sendSimpleMail(alerte);
-
-    //       alerteRepository.save(alerte);
-    
-    //     // Envoyer une alerte de succès
-    //     // Utilisez un service d'alerte pour envoyer une notification à l'utilisateur.
-    
-    //     return savedDemande;
-    // }
-    
 
 
     //  public List<Demande> getAllDemande(){
@@ -297,15 +207,15 @@ public class DemandeService {
 
     //////////
 
-    // public ResponseEntity<List<Demande>> getAllDemande() {
-    //     try {
-    //         List<Demande> demandes = demandeRepository.findAll();
-    //         return new ResponseEntity<>(demandes, HttpStatus.OK);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
-    //     }
-    // }
+    public ResponseEntity<List<Demande>> getAllDemande() {
+        try {
+            List<Demande> demandes = demandeRepository.findAll();
+            return new ResponseEntity<>(demandes, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
      public List<Demande> lireParUser(Integer idUtilisateur){
         List<Demande> demandes = demandeRepository.findByUtilisateurIdUtilisateur(idUtilisateur);
@@ -315,16 +225,7 @@ public class DemandeService {
 
     }
 
-    // public String validerDemande(int idDemande, int idAgent) throws Exception{
-
-    //  Agent agent = agentRepository.findById(idAgent).orElseThrow(() -> new Exception("Agent introuvable"));;
-    //  Demande demande = demandeRepository.findById(idDemande).orElseThrow(() -> new Exception("Demande introuvable"));;
-      
-          
-
-    //  return "Demande  " + idDemande + "valider avec succès";
-
-    // }
+   
 
     public Demande validateDemande(Integer demandeId, Integer agentId)  {
         // Find the demande by its ID
@@ -403,41 +304,6 @@ public class DemandeService {
         return rejectedDemande;
     }
     
-
-    //   public Demande validateDemande(Integer demandeId, Integer agentId) {
-    //     // Find the demande by its ID
-    //     Demande demande = demandeRepository.findById(demandeId).orElse(null);
-    //     if (demande == null) {
-    //         throw new RuntimeException("Demande not found");
-    //     }
-
-    //     // Set the demande's status to "validé"
-    //     demande.setStatutDemande("validé");
-
-    //     // Find and associate agents with the demande
-    //     Agent agent = agentRepository.findById(agentId).orElse(null);
-    // if (agent == null) {
-    //     throw new RuntimeException("Agent non trouvé");
-    // }
-    // demande.setAgent(Collections.singleton(agent));
-
-    //     // Save the updated demande
-    //     String date ;
-    //     LocalDate localDate =  LocalDate.now();
-    //     // SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-    //     date = localDate.toString();
-    //     Alerte al = new Alerte();
-    //     al.setDate(localDate.toString());
-    //     Demande validatedDemande = demandeRepository.save(demande);
-
-
-    //     // Send an email notification to the user
-    //     String message = "Votre demande a été validée avec succès.";
-    //     Alerte alerte = new Alerte(validatedDemande.getUtilisateur().getEmail(), message, "Validation de demande", date);
-    //     emailService.sendSimpleMail(alerte);
-
-    //     return validatedDemande;
-    // }
 
 
     //Get user byID

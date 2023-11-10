@@ -130,10 +130,10 @@ public ResponseEntity<Demande> createDemande(
     }
 
 
-    // @GetMapping("/read")
-    // public ResponseEntity<List<Demande>> getAllDemande() {
-    //     return demandeService.getAllDemande();
-    // }
+    @GetMapping("/read")
+    public ResponseEntity<List<Demande>> getAllDemande() {
+        return demandeService.getAllDemande();
+    }
 
 
        
