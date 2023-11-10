@@ -19,9 +19,13 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+// @Data
+@Getter
+@Setter
 public class Banque {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,8 +41,8 @@ public class Banque {
     @Column(nullable = false)
     private String image;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    // @Temporal(TemporalType.DATE)
+    // @JsonFormat(pattern = "dd-MM-yyyy")
     private String dateCreated;
 
     // //Liste des agents de la banque
@@ -57,10 +61,12 @@ public class Banque {
     // //Liaison admin à banque
     @OneToOne
     @JoinColumn(name = "id_admin")
+    @JsonIgnore
     private Admin admin;
 
     @ManyToOne
     @JoinColumn(name = "idSuperAdmin")
+    @JsonIgnore
     private SuperAdmin superAdmin;
     
 }
