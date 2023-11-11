@@ -17,16 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.solution.express.models.Alerte;
-import com.solution.express.models.Cotisation;
-import com.solution.express.models.Demande;
+
 import com.solution.express.models.Evenement;
-import com.solution.express.models.SuperAdmin;
-import com.solution.express.models.Utilisateur;
+
 import com.solution.express.repository.CotisationRepository;
 import com.solution.express.repository.EvenementRepository;
 import com.solution.express.services.EvenementService;
-
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
@@ -39,11 +35,8 @@ public class EvenementController {
 
     @Autowired
     private EvenementRepository evenementRepository;
-    @Autowired
-    private CotisationRepository cotisationRepository;
 
     
-
     @PostMapping("/create/{idCotisation}")
     public Evenement createEvenementWithCotisation(@RequestBody Evenement evenement,@PathVariable Integer idCotisation) {
             // Vérifier si l'événement existe déjà

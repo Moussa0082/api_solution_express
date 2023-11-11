@@ -74,18 +74,55 @@ public class EvenementService {
        
 
     //Modifier evenement Methode
-    public Evenement updateEvenement(Integer id, Evenement evenement) {
-        return evenementRepository.findById(id)
-                .map(ev -> {
-                    ev.setNomEvenement(evenement.getNomEvenement());
-                    ev.setDescriptionEvenement(evenement.getDescriptionEvenement());
-                    ev.setLieuEvenement(evenement.getLieuEvenement());
-                    ev.setDateEvenement(evenement.getDateEvenement());
-                    ev.setHeureEvenement(evenement.getHeureEvenement());
-                    return evenementRepository.save(ev);
-                }).orElseThrow(() -> new RuntimeException(("Evenement non existant avec l'ID " + id)));
+    // public Evenement updateEvenement(Integer id, Evenement evenement) {
+    //     return evenementRepository.findById(id)
+    //             .map(ev -> {
+    //                 ev.setNomEvenement(evenement.getNomEvenement());
+    //                 ev.setDescriptionEvenement(evenement.getDescriptionEvenement());
+    //                 ev.setLieuEvenement(evenement.getLieuEvenement());
+    //                 ev.setDateEvenement(evenement.getDateEvenement());
+    //                 ev.setHeureEvenement(evenement.getHeureEvenement());
+    //                 return evenementRepository.save(ev);
+    //             }).orElseThrow(() -> new RuntimeException(("Evenement non existant avec l'ID " + id)));
     
+    // }
+
+
+    public Evenement updateEvenement(Integer id, Evenement updatedEvenement) {
+        Evenement existingEvenement = evenementRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Événement non trouvé avec l'ID : " + id));
+    
+        // Comparez les champs pour détecter les modifications
+        if (!existingEvenement.getNomEvenement().equals(updatedEvenement.getNomEvenement()) ||
+            !existingEvenement.getDescriptionEvenement().equals(updatedEvenement.getDescriptionEvenement())) {
+            // Les champs "nomEvenement" ou "descriptionEvenement" ont été modifiés
+            // Envoyez un e-mail à tous les membres de la cotisation avec l'événement modifié
+            List<Utilisateur> membresCotisation = existingEvenement.getCotisation().getUtilisateur();
+            String dateEvenement = existingEvenement.getDateEvenement();
+            String heureEvenement = existingEvenement.getHeureEvenement();
+            String msg = "L'événement a été modifié : " + updatedEvenement.getNomEvenement() +
+                " a date c'est le " + dateEvenement + " à " + heureEvenement;
+    
+            for (Utilisateur utilisateur : membresCotisation) {
+                Alerte alerte = new Alerte(utilisateur, utilisateur.getEmail(), msg, "Modification d'événement" + " sur le groupe " + existingEvenement.getCotisation().getNom(), dateEvenement);
+                
+                // Envoyez un e-mail à chaque membre de la cotisation
+                emailService.sendSimpleMail(alerte);
+            }
+        }
+    
+        // Mettez à jour l'événement dans la base de données
+        existingEvenement.setNomEvenement(updatedEvenement.getNomEvenement());
+        existingEvenement.setDescriptionEvenement(updatedEvenement.getDescriptionEvenement());
+        existingEvenement.setLieuEvenement(updatedEvenement.getLieuEvenement());
+        existingEvenement.setDateEvenement(updatedEvenement.getDateEvenement());
+        existingEvenement.setHeureEvenement(updatedEvenement.getHeureEvenement());
+        
+        Evenement updatedEvenements = evenementRepository.save(existingEvenement);
+        
+        return updatedEvenements;
     }
+    
 
 
         //Recuperer les evenement par ID groupe de cotisation
