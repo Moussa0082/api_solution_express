@@ -111,7 +111,7 @@ public class EvenementService {
         
        
 
-    //Modifier evenement methode
+    //Modifier evenement Methode
     public Evenement updateEvenement(Integer id, Evenement evenement) {
         return evenementRepository.findById(id)
                 .map(ev -> {
