@@ -1,10 +1,5 @@
 package com.solution.express.services;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -83,19 +78,18 @@ public class EvenementService {
         //     return evenement;
         // }
 
-         public Evenement createEvenement(Evenement evenement) throws Exception {
-
-        // Verifie si la banque existe
-        Cotisation cotisation = cotisationRepository.findById(evenement.getCotisation().getIdCotisation())
-                .orElseThrow(() -> new IllegalArgumentException("Banque non trouver: " + evenement.getCotisation().getIdCotisation()));
-    
-        Optional<Evenement> existingEvenement = evenementRepository.findByDateEvenement(evenement.getDateEvenement());
-        if (existingEvenement.isPresent()) {
-            throw new IllegalArgumentException("L'evenement " + existingEvenement.get().getNomEvenement() + " existe déjà le meme jour");
+        public Evenement createEvenementWithCotisation(Evenement evenement, Integer idCotisation) {
+            // Assurez-vous que la cotisation existe en vérifiant son ID
+            Cotisation cotisation = cotisationRepository.findById(idCotisation)
+                    .orElseThrow(() -> new IllegalArgumentException("Cotisation non trouvée : " + idCotisation));
+        
+            // Associez la cotisation à l'événement
+            evenement.setCotisation(cotisation);
+        
+            // Insérez l'événement dans la base de données
+            return evenementRepository.save(evenement);
         }
-        return evenement;
-    
-         }
+        
         
        
 

@@ -23,13 +23,12 @@ public class Evenement {
     @Id
     private int idEvenement;
     
-    @Column(nullable = false)
     private String nomEvenement;
     
-    @Column(nullable = false)
+    // @Column(nullable = false)
     private String descriptionEvenment;
     
-    @Column(nullable = false)
+    // @Column(nullable = false)
     private String lieuEvenement;
 
 

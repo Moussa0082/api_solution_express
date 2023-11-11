@@ -61,25 +61,10 @@ public class EvenementController {
 //     return new ResponseEntity<>(ev, HttpStatus.CREATED);
 // }
 
-    @PostMapping("/create")
-    public Evenement createEvent(@RequestBody Evenement evenement) throws Exception {
-        // if (evenementRepository.findByDateEvenement(evenement.getDateEvenement()) == null) {
-        //     evenementService.createEvenement(evenement);
-        //     return new ResponseEntity<>(evenement, HttpStatus.CREATED);
-        // }
-        //  else {
-        //     throw new IllegalArgumentException("L'evenement " + evenement.getNomEvenement() + " existe déjà le " + evenement.getDateEvenement());
-        // }
-
-        Cotisation cotisations = cotisationRepository.findById(evenement.getCotisation().getIdCotisation()).orElse(null);
-
-        if (cotisations != null) {
-            evenementService.createEvenement(evenement);
-        } else {
-         
-        }
-        return evenement;
-    }
+@PostMapping("/create/{idCotisation}")
+public Evenement createEvenementWithCotisation(@RequestBody Evenement evenement,@PathVariable Integer idCotisation) {
+    return evenementService.createEvenementWithCotisation(evenement, idCotisation);
+}
 
 
     

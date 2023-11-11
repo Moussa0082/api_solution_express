@@ -1,6 +1,7 @@
 package com.solution.express.models;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -33,25 +34,26 @@ public class Alerte {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAlerte;
 
-    @NotEmpty
     @Email
     private String email;
 
     
-    // @Size(max = 255)
-    // @Column(unique = true)
+
     private String mesage;
 
     private String sujet;
 
-    // @Temporal(TemporalType.DATE)
-    // @JsonFormat(pattern = "dd-MM-yyyy")
+  
     private String date;
 
   //lier l'utilisateur à l'alerte pour voir l'utilisateur concerner par l'alerte en question
     @ManyToOne
     @JoinColumn(name = "idUtilisateur")
     private Utilisateur utilisateur;
+
+    @ManyToOne
+    @JoinColumn(name = "idAdmin")
+    private Admin admin;
 
     public Alerte(Utilisateur utilisateur,String email, String mesage, String sujet, String date){
       this.utilisateur = utilisateur;
@@ -60,5 +62,19 @@ public class Alerte {
       this.sujet = sujet;
       this.date = date;
     }
+    public Alerte(String email, String mesage, String sujet, String date){
+      this.email = email;
+      this.mesage = mesage;
+      this.sujet = sujet;
+      this.date = date;
+    }
+    // public Alerte( Admin admin, String email, String mesage, String sujet, String date){
+    //   this.admin = admin;
+    //   this.email = email;
+    //   this.mesage = mesage;
+    //   this.sujet = sujet;
+    //   this.date = date;
+    // }
+   
     
 }

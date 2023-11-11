@@ -22,11 +22,11 @@ public class AlerteController {
     @Autowired
     private AlerteService alerteService;
 
-    // @GetMapping("/list/{idUtilisateur}")
-    // @Operation(summary = "affichage des alertes à travers l'id de utilisateur")
-    // public ResponseEntity<List<Alerte>> listeAlerteByUseur(@PathVariable Integer idUtilisateur){
-    //     return  new ResponseEntity<>(alerteService.getAlerteByUtilisateur(idUtilisateur), HttpStatus.OK);
-    // }
+    @GetMapping("/list/{idUtilisateur}")
+    @Operation(summary = "affichage des alertes à travers l'id de utilisateur")
+    public ResponseEntity<List<Alerte>> listeAlerteByUseur(@PathVariable Integer idUtilisateur){
+        return  new ResponseEntity<>(alerteService.getAlerteByUtilisateur(idUtilisateur), HttpStatus.OK);
+    }
     
     
 }

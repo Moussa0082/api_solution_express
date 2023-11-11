@@ -50,7 +50,7 @@ public class TypeBanque {
     // //Joindre la banque a son type
     @ManyToOne
     @JoinColumn(name = "idBanque")
-    @JsonIgnoreProperties(value = {"demande"})
+    // @JsonIgnoreProperties(value = {"demande"})
     private Banque banque;
 
     // //Liste des demandes dans le type
