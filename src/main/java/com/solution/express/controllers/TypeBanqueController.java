@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.solution.express.models.Banque;
+import com.solution.express.models.Evenement;
 import com.solution.express.models.TypeBanque;
 import com.solution.express.services.TypeBanqueService;
 
@@ -77,6 +78,12 @@ public class TypeBanqueController {
         }
     }
      
+      //Liste des typeBanque par ID banque
+       @GetMapping("/list/{idBanque}")
+    @Operation(summary = "Affichage la liste des typeBanque par ID banque")
+    public ResponseEntity<List<TypeBanque>> listeTypeBanque(@PathVariable Integer idBanque){
+        return  new ResponseEntity<>(typeBanqueService.getAllTypeBanque(idBanque),HttpStatus.OK);
+    }
 
 
          @GetMapping("/read")

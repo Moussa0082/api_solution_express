@@ -76,28 +76,6 @@ public class DemandeController {
        
     }
     
-    //   @PostMapping("/send/{idTypeBanque}/{idUtilisateur}")
-    //   public ResponseEntity<Demande> createDemande(
-    //     @Valid @RequestParam("demande") String demandeString,
-    //     @RequestParam(value = "image1" , required = false) MultipartFile imageFile1,
-    //     @RequestParam( value = "image2" , required = false) MultipartFile imageFile2,
-    //     @PathVariable("idUtilisateur") Integer idUtilisateur,
-    //     @PathVariable( value = "idTypeBanque") Integer idTypeBanque
-    // ) throws Exception{
-    //     try {
-    //         // Récupérer l'utilisateur et le type de banque en fonction des IDs
-    //         Utilisateur user = utilisateurRepository.findByIdUtilisateur(idUtilisateur); // UtilisateurService doit être un service que vous avez implémenté
-    //         Demande demandes = new Demande();
-    //         TypeBanque typeBanque = typeBanqueRepository.findById(idTypeBanque).orElse(null); // TypeBanqueService doit être un service que vous avez implémenté
-    //         demandes = new JsonMapper().readValue(demandeString, Demande.class);
-
-    //         Demande createdDemande = demandeService.createDemande(demandes, imageFile1, imageFile2, user, typeBanque);
-
-    //         return new ResponseEntity<>(createdDemande, HttpStatus.CREATED);
-    //     } catch (JsonProcessingException e) {
-    //         throw new Exception(e.getMessage());
-    //     }
-    // }
 
     @PostMapping("/send")
 public ResponseEntity<Demande> createDemande(
@@ -129,12 +107,11 @@ public ResponseEntity<Demande> createDemande(
         return  new ResponseEntity<>(demandeService.lireParUser(idUtilisateur),HttpStatus.OK);
     }
 
-
+   //Liste des demandes
     @GetMapping("/read")
     public ResponseEntity<List<Demande>> getAllDemande() {
         return demandeService.getAllDemande();
     }
-
 
        
     //Lire un user spécifique

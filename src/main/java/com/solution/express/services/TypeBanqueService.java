@@ -19,9 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.solution.express.models.Banque;
+import com.solution.express.models.Evenement;
 import com.solution.express.models.TypeBanque;
 import com.solution.express.repository.BanqueRepository;
 import com.solution.express.repository.TypeBanqueRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class TypeBanqueService {
@@ -84,6 +87,17 @@ public class TypeBanqueService {
     
         return ResponseEntity.ok(typeBanque.get());     
        }
+
+       //Recuperer les typeBanque par ID Banque
+        public List<TypeBanque> getAllTypeBanque(Integer idBanque){
+        List<TypeBanque>  typeBanque = typeBanqueRepository.findByBanqueIdBanque(idBanque);
+
+        if(typeBanque.isEmpty()){
+            throw new EntityNotFoundException("Aucun type de banque trouvé");
+        }
+        
+        return typeBanque;
+        }
 
 
     //Modifier un user

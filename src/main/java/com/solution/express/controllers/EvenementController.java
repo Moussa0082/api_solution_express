@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.solution.express.models.Alerte;
 import com.solution.express.models.Cotisation;
+import com.solution.express.models.Demande;
 import com.solution.express.models.Evenement;
 import com.solution.express.models.SuperAdmin;
 import com.solution.express.models.Utilisateur;
@@ -41,45 +42,24 @@ public class EvenementController {
     @Autowired
     private CotisationRepository cotisationRepository;
 
-    // @PostMapping("/create/{idCotisation}")
-//     public ResponseEntity<Evenement> createEvent(@RequestBody Evenement ev, @RequestParam int idCotisation) throws Exception {
-
-//     // Trouver la cotisation
-//     Cotisation cotisation = cotisationRepository.findById(idCotisation).orElseThrow(() -> new Exception("Cotisation introuvable"));
-
-//     // Vérifier si l'événement existe déjà
-//     if (evenementRepository.findByDateEvenement(ev.getDateEvenement()) != null) {
-//         throw new IllegalArgumentException("L'événement " + ev.getNomEvenement() + " existe déjà le" + ev.getDateEvenement());
-//     }
-
-//     // Attribuer la cotisation à l'événement
-//     ev.setCotisation(cotisation);
-
-//     // Enregistrer l'événement
-//     evenementRepository.save(ev);
-
-//     return new ResponseEntity<>(ev, HttpStatus.CREATED);
-// }
-
-@PostMapping("/create/{idCotisation}")
-public Evenement createEvenementWithCotisation(@RequestBody Evenement evenement,@PathVariable Integer idCotisation) {
-    return evenementService.createEvenementWithCotisation(evenement, idCotisation);
-}
-
-
     
 
-    // @PostMapping("/create/{idCotisation}")
-    // public ResponseEntity<String> createEvenement(@RequestBody Evenement evenement, @PathVariable int idCotisation) {
-    //     try {
-    //         Cotisation createurCotisation = cotisationRepository.getByIdCotisation(idCotisation);
-    //         Evenement createdEvenement = evenementService.createEvenement(createurCotisation, evenement);
-    //         evenementService.createEvenement(createurCotisation, createdEvenement);
-    //         return new ResponseEntity<>("Evenement ajouté avec succès. ID de l'événement : " + createdEvenement.getIdEvenement(), HttpStatus.CREATED);
-    //     } catch (Exception e) {
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    @PostMapping("/create/{idCotisation}")
+    public Evenement createEvenementWithCotisation(@RequestBody Evenement evenement,@PathVariable Integer idCotisation) {
+            // Vérifier si l'événement existe déjà
+    
+        return evenementService.createEvenementWithCotisation(evenement, idCotisation);
+    }
+
+
+
+     @GetMapping("/list/{idCotisation}")
+    @Operation(summary = "Affichage la liste  des evenements  A travers l'id de la cotisation")
+    public ResponseEntity<List<Evenement>> listeEvenementParCotisation(@PathVariable Integer idCotisation){
+        return  new ResponseEntity<>(evenementService.getAllEvenemenetByCotisation(idCotisation),HttpStatus.OK);
+    }
+
+   
 
     @GetMapping("/read/{id}")
     public ResponseEntity<?> getEvenementById(@PathVariable Integer id) {

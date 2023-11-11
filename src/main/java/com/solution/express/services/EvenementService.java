@@ -38,54 +38,16 @@ public class EvenementService {
   @Autowired
   private EmailService emailService;
 
-        // public Evenement createEvenement(Evenement evenement) throws Exception {
-        //     Cotisation co = cotisationRepository.findByCreateurAndIdCotisation(evenement.getCotisation().getCreateur(), evenement.getCotisation().getIdCotisation());
-        //     // if( co == null ){
-
-        //     //   evenementRepository.save(evenement);
-        //     // }
-        //     if (evenement.getCotisation() != null && evenement.getCotisation().getCreateur() != null) {
-        //         Cotisation cos = cotisationRepository.findByCreateurAndIdCotisation(
-        //             evenement.getCotisation().getCreateur(),
-        //             evenement.getCotisation().getIdCotisation()
-        //         );
-        
-        //         if (cos == null) {
-        //             evenementRepository.save(evenement);
-        //         }
-        //     }
-        
-        //     return evenement;
-            
-        // }
- 
-        // public Evenement createEvenement(Evenement evenement, Cotisation cotisation) throws Exception {
-        //     // Récupérer la Cotisation associée à l'Evenement
-        //     // Cotisation cotisations = evenement.getCotisation();
-            
-        //     // Vérifier si la Cotisation existe déjà dans la base de données
-        //     Cotisation existingCotisation = cotisationRepository.findById(evenement.getCotisation().getIdCotisation()).orElse(null);
-        
-        //     if (existingCotisation == null) {
-        //         // Si la Cotisation n'existe pas, enregistrer la Cotisation et l'Evenement
-        //         // cotisationRepository.save(cotisation);
-        //         // evenementRepository.save(evenement);
-        //         throw new BadRequestException("La Cotisation avec l'ID " + cotisation.getIdCotisation() + " n'existe pas.");
-
-        //     } else {
-        //         // Si la Cotisation existe, associer l'Evenement à cette Cotisation existante
-        //         evenement.setCotisation(existingCotisation);
-        //         evenementRepository.save(evenement);
-        //     }
-        
-        //     return evenement;
-        // }
+      
 
         public Evenement createEvenementWithCotisation(Evenement evenement, Integer idCotisation) {
             // Assurez-vous que la cotisation existe en vérifiant son ID
             Cotisation cotisation = cotisationRepository.findById(idCotisation)
                     .orElseThrow(() -> new IllegalArgumentException("Cotisation non trouvée avec l'ID : " + idCotisation));
-        
+            Evenement  ev = evenementRepository.findByDateEvenement(evenement.getDateEvenement());
+            if ( ev != null) {
+                throw new BadRequestException("L'événement " + evenement.getNomEvenement() + " existe déjà le " + evenement.getDateEvenement());
+            }
             // Associez la cotisation à l'événement
             evenement.setCotisation(cotisation);
             // Insérez l'événement dans la base de données
@@ -96,10 +58,10 @@ public class EvenementService {
     
     for (Utilisateur utilisateur : membresCotisation) {
         String dateEvenement = savedEvenement.getDateEvenement();
-        String msg = "Nouvel événement : " + savedEvenement.getNomEvenement() +
-            " le " + dateEvenement + "votre présence est vivement souhaitée";
+        String msg = "Nouvel événement : " + " " + savedEvenement.getNomEvenement() +
+            " le " + dateEvenement + "  votre présence est vivement souhaitée";
         
-        Alerte alerte = new Alerte(utilisateur, utilisateur.getEmail(), msg, "Nouvel événement", dateEvenement);
+        Alerte alerte = new Alerte(utilisateur, utilisateur.getEmail(), msg, "Nouvel événement" + " du groupe " + savedEvenement.getCotisation().getNom() , dateEvenement);
         
         // Envoyez un e-mail à chaque membre de la cotisation
         emailService.sendSimpleMail(alerte);
@@ -126,16 +88,16 @@ public class EvenementService {
     }
 
 
-        //Recuperer la cotisation par utilisateur
-        // public List<Evenement> getAllEvenemenetByUtilisateur(Integer idUtilisateur){
-        // List<Evenement>  evenement = evenementRepository.findByUtilisateurIdUtilisateur(idUtilisateur);
+        //Recuperer les evenement par ID groupe de cotisation
+        public List<Evenement> getAllEvenemenetByCotisation(Integer idCotisation){
+        List<Evenement>  evenement = evenementRepository.findByCotisationIdCotisation(idCotisation);
 
-        // if(evenement.isEmpty()){
-        //     throw new EntityNotFoundException("Aucun evenement trouvé");
-        // }
+        if(evenement.isEmpty()){
+            throw new EntityNotFoundException("Aucun evenement trouvé");
+        }
 
-        // return evenement;
-        // }
+        return evenement;
+        }
 
 
     //Recuperer la liste des evenement
