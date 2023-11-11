@@ -48,7 +48,7 @@ public class Demande {
 
     private String statutDemande = "reçue";
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String numeroUser;
     
     @Column(nullable = false)

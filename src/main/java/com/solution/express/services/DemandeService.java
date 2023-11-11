@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.solution.express.Exceptions.BadRequestException;
 import com.solution.express.Exceptions.NoContentException;
 import com.solution.express.models.Agent;
 import com.solution.express.models.Alerte;
@@ -84,7 +85,8 @@ public class DemandeService {
             emailService.sendSimpleMail(alerte);
             
             alerteRepository.save(alerte);
-            throw new IllegalArgumentException("Une demande de ce type existe déjà pour l'utilisateur avec l'email " + existingDemande.getUtilisateur().getEmail());
+            throw new BadRequestException("Une demande de  " + existingDemande.getTypeBanque().getNom() +" existe déjà pour l'utilisateur avec l'email " + existingDemande.getUtilisateur().getEmail());
+            // throw new IllegalArgumentException("Une demande de  " + existingDemande.getTypeBanque().getNom() +" existe déjà pour l'utilisateur avec l'email " + existingDemande.getUtilisateur().getEmail());
         }
     
         demande.setNumeroDemande(numeroDemande);
@@ -92,6 +94,7 @@ public class DemandeService {
         // Traitement du fichier image 1
         if (imageFile1 != null) {
             String imageLocation = "C:\\xampp\\htdocs\\solution_express";
+            // String imageLocation = "C:\\xampp\\htdocs\\solution_express";
             try {
                 Path imageRootLocation = Paths.get(imageLocation);
                 if (!Files.exists(imageRootLocation)) {
@@ -165,6 +168,8 @@ public class DemandeService {
         }
         return sb.toString();
     }
+
+    
     
 
     // public Demande createDemande(Demande demande, MultipartFile imageFile1, MultipartFile imageFile2, Utilisateur user) throws Exception {
