@@ -26,7 +26,7 @@ public class Evenement {
     private String nomEvenement;
     
     // @Column(nullable = false)
-    private String descriptionEvenment;
+    private String descriptionEvenement;
     
     // @Column(nullable = false)
     private String lieuEvenement;

@@ -24,7 +24,7 @@ public interface EvenementRepository extends JpaRepository<Evenement,Integer>{
     // String findEvenementByDescriptionAndNom(String nomEvenement, String Description);
     // Evenement findEvenementByUtilisateurAndIdEvenement(Utilisateur utilisateur, String nomEvenement);
 
-    // List<Evenement> findByUtilisateurIdUtilisateur(Integer Utilisateur);
+    // List<Evenement> findByUtilisateurAndDateEvenement(Utilisateur utilisateur, Evenement  evenement);
 
     // Evenement findByIdEvenementAndDateEvenement(int idEvenement, Date dateEvenement);
 

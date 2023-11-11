@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.solution.express.Exceptions.BadRequestException;
+import com.solution.express.models.Alerte;
 import com.solution.express.models.Banque;
 import com.solution.express.models.Cotisation;
 import com.solution.express.models.Evenement;
@@ -34,6 +35,8 @@ public class EvenementService {
   @Autowired
   private CotisationRepository cotisationRepository;
 
+  @Autowired
+  private EmailService emailService;
 
         // public Evenement createEvenement(Evenement evenement) throws Exception {
         //     Cotisation co = cotisationRepository.findByCreateurAndIdCotisation(evenement.getCotisation().getCreateur(), evenement.getCotisation().getIdCotisation());
@@ -81,13 +84,28 @@ public class EvenementService {
         public Evenement createEvenementWithCotisation(Evenement evenement, Integer idCotisation) {
             // Assurez-vous que la cotisation existe en vérifiant son ID
             Cotisation cotisation = cotisationRepository.findById(idCotisation)
-                    .orElseThrow(() -> new IllegalArgumentException("Cotisation non trouvée : " + idCotisation));
+                    .orElseThrow(() -> new IllegalArgumentException("Cotisation non trouvée avec l'ID : " + idCotisation));
         
             // Associez la cotisation à l'événement
             evenement.setCotisation(cotisation);
-        
             // Insérez l'événement dans la base de données
-            return evenementRepository.save(evenement);
+            Evenement savedEvenement = evenementRepository.save(evenement);
+            
+
+             List<Utilisateur> membresCotisation = cotisation.getUtilisateur();
+    
+    for (Utilisateur utilisateur : membresCotisation) {
+        String dateEvenement = savedEvenement.getDateEvenement();
+        String msg = "Nouvel événement : " + savedEvenement.getNomEvenement() +
+            " le " + dateEvenement + "votre présence est vivement souhaitée";
+        
+        Alerte alerte = new Alerte(utilisateur, utilisateur.getEmail(), msg, "Nouvel événement", dateEvenement);
+        
+        // Envoyez un e-mail à chaque membre de la cotisation
+        emailService.sendSimpleMail(alerte);
+    }
+        
+            return evenement;
         }
         
         
@@ -98,7 +116,7 @@ public class EvenementService {
         return evenementRepository.findById(id)
                 .map(ev -> {
                     ev.setNomEvenement(evenement.getNomEvenement());
-                    ev.setDescriptionEvenment(evenement.getDescriptionEvenment());
+                    ev.setDescriptionEvenement(evenement.getDescriptionEvenement());
                     ev.setLieuEvenement(evenement.getLieuEvenement());
                     ev.setDateEvenement(evenement.getDateEvenement());
                     ev.setHeureEvenement(evenement.getHeureEvenement());
