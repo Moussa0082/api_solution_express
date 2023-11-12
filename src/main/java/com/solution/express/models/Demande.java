@@ -98,4 +98,8 @@ public class Demande {
     // @JsonIgnore
     private Utilisateur utilisateur;
 
+    @ManyToOne
+    // @JsonIgnore
+    private Agent agentCharger;
+
 }

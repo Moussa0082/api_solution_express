@@ -30,6 +30,7 @@ import com.solution.express.models.Admin;
 import com.solution.express.models.Agent;
 import com.solution.express.models.Alerte;
 import com.solution.express.models.Banque;
+import com.solution.express.models.Cotisation;
 import com.solution.express.models.Demande;
 import com.solution.express.models.TypeBanque;
 import com.solution.express.models.Utilisateur;
@@ -183,16 +184,7 @@ public class DemandeService {
                   Alerte alerte = new Alerte(user,savedDemande.getAdmin(), savedDemande.getAdmin().getEmail(), message, "Nouvelle demande", date);
                   emailService.sendSimpleMail(alerte);
                   alerteRepository.save(alerte);
-        
-         
-        
-        // }
-        
-        
-        
-        // Alerte alertesa = new Alerte(savedDemande.getTypeBanque().getBanque().getAdmin().getEmail(), msg_ad, "Reception de demande", dateDemande);
-            
-            //  emailService.sendSimpleMail(alertesa);
+ 
     
     
          return demande;
@@ -214,7 +206,55 @@ public class DemandeService {
     
     
 
+  //Alerter les agents et attribution d'une demande à un agent 
+  public Demande attribuerDemandeAAgent(int demandeId, int agentId) {
+    Demande demande = demandeRepository.findById(demandeId).orElse(null);
+    Agent agent = agentRepository.findById(agentId).orElse(null);
 
+        String dateDemande;
+        LocalDate localDate3 = LocalDate.now();
+        dateDemande = localDate3.toString();
+    if (demande != null && agent != null) {
+        // Assigner la demande à l'agent
+        demande.setAgentCharger(agent);
+        Demande savedDemande = demandeRepository.save(demande);
+
+        // Envoyer un e-mail à l'agent attribué
+        String messageToAssignedAgent = "Vous avez été chargé de traiter la demande de l'utilisateur " +
+                savedDemande.getUtilisateur().getPrenom() + " " + savedDemande.getUtilisateur().getNom()+" pour une demande de " + savedDemande.getTypeBanque().getNom()  + ". Veuillez agir dans les plus brefs délais.";
+      Alerte al = new Alerte(savedDemande.getAgentCharger().getEmail(),"Nouvelle demande attribuée", messageToAssignedAgent, dateDemande);
+        emailService.sendSimpleMail(al);
+
+        // Récupérer tous les agents de la banque
+        List<Agent> allAgents = agentRepository.findAllByBanque(agent.getBanque());
+
+        // Envoyer un e-mail aux autres agents de la banque
+        for (Agent otherAgent : allAgents) {
+            if (!otherAgent.equals(agent)) {
+                String messageToOtherAgents = "Cher " + otherAgent.getPrenom() + ",\n\n" +
+                        "Une nouvelle demande a été attribuée à l'agent " + agent.getPrenom() + ". " +
+                        "Veuillez noter que vous n'êtes pas responsable de cette demande.";
+                        Alerte alAuxAutresAgent = new Alerte(otherAgent.getEmail(), "Nouvelle demande attribuée", messageToOtherAgents,dateDemande);
+                emailService.sendSimpleMail(alAuxAutresAgent);
+            }
+        }
+
+        return savedDemande;
+    }
+    return null;
+}
+
+
+    //Recuperer la liste des demande par banque
+    public List<Demande> getAllDemandeByBanque(Integer idBanque){
+        List<Demande>  Demande = demandeRepository.findByIdBanque(idBanque);  //Repository nom a corriger
+
+        if(Demande.isEmpty()){
+            throw new EntityNotFoundException("Aucune demande trouvé");
+        }
+
+        return Demande;
+    }
 
 
     public ResponseEntity<List<Demande>> getAllDemande() {

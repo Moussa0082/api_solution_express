@@ -113,11 +113,39 @@ public ResponseEntity<Demande> createDemande(
 }
  ///////////////
 
-    @GetMapping("/list/{idUtilisateur}")
+
+ @PostMapping("/{demandeId}/assign/{agentId}")
+ public Demande assignDemandeToAgent(
+     @PathVariable("demandeId") int demandeId,
+     @PathVariable("agentId") int agentId
+ ) {
+     Demande assignedDemande = demandeService.attribuerDemandeAAgent(demandeId, agentId);
+     
+     if (assignedDemande != null) {
+         return assignedDemande;
+     } else {
+         // Handle the case where the assignment was not successful, e.g., return an error message.
+         // You can throw a custom exception or return an appropriate HTTP response.
+         return null;
+     }
+ }
+
+
+
+
+
+    @GetMapping("/listU/{idUtilisateur}")
     @Operation(summary = "Affichage la liste  des demandes A travers l'id de l'utilisateur")
     public ResponseEntity<List<Demande>> listeDemandeByUser(@PathVariable Integer idUtilisateur){
         return  new ResponseEntity<>(demandeService.lireParUser(idUtilisateur),HttpStatus.OK);
     }
+    
+    @GetMapping("/listB/{idBanque}")
+    @Operation(summary = "Affichage la liste  des demandes A travers l'id de la banque")
+    public ResponseEntity<List<Demande>> listeDemandePaBanque(@PathVariable Integer idBanque){
+        return  new ResponseEntity<>(demandeService.getAllDemandeByBanque(idBanque),HttpStatus.OK);
+    }
+
 
    //Liste des demandes
     @GetMapping("/read")
