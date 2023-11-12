@@ -75,6 +75,18 @@ public class DemandeController {
             return ResponseEntity.ok(rejectedDemande);
        
     }
+
+    //Rejeter demande
+    @PutMapping("/annuler/{demandeId}/{idUtilisateur}")
+    public ResponseEntity<Demande> annulerDemande(
+        @PathVariable Integer demandeId,
+        @PathVariable Integer idUtilisateur
+    ) {
+       
+            Demande cancelDemande = demandeService.annulerDemande(demandeId, idUtilisateur);
+            return ResponseEntity.ok(cancelDemande);
+       
+    }
     
 
     @PostMapping("/send")

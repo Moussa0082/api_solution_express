@@ -2,6 +2,7 @@ package com.solution.express.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.solution.express.models.Admin;
 import com.solution.express.models.Banque;
 import com.solution.express.models.TypeBanque;
 
@@ -15,5 +16,7 @@ public interface BanqueRepository extends JpaRepository<Banque,Integer> {
     Banque findByIdBanque (Integer id);
     
     Banque findBanqueByTypeBanque (TypeBanque typeBanque);
+
+    Banque findByIdBanqueAndAdmin(int idBanque, Admin admin);
 
 }
