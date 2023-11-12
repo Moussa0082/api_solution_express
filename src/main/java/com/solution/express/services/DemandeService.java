@@ -64,8 +64,7 @@ public class DemandeService {
      @Autowired
      private AgentRepository agentRepository;
 
-     @Autowired
-     private BanqueRepository banqueRepository;
+
 
   //Faire demande
     public Demande createDemande(Demande demande, MultipartFile imageFile1, MultipartFile imageFile2, Utilisateur user) throws Exception {
@@ -86,7 +85,6 @@ public class DemandeService {
 
         TypeBanque typeBanque = typeBanqueRepository.findById(demande.getTypeBanque().getIdTypeBanque()).orElse(null);
         Demande existingDemande = demandeRepository.findByTypeBanqueAndUtilisateur(demande.getTypeBanque(), user);
-        Banque banque = banqueRepository.findById(typeBanque.getBanque().getIdBanque()).orElse(null);    
         
         
 
@@ -160,6 +158,7 @@ public class DemandeService {
         String dateDemande;
         LocalDate localDate3 = LocalDate.now();
         dateDemande = localDate3.toString();
+
         // Save the demande to the database
         Demande savedDemande = demandeRepository.save(demande);
         
@@ -171,7 +170,7 @@ public class DemandeService {
         // Alerte alertes = new Alerte(user,demande.getUtilisateur().getEmail(), msg_a, "Alerte reception de demande", dateDemande);
         
         emailService.sendSimpleMail(alertes);
-        // alerteRepository.save(alertes);
+        alerteRepository.save(alertes);
         
 
              // Envoi d'un e-mail à l'administrateur
@@ -181,8 +180,9 @@ public class DemandeService {
                    
                   String date = LocalDate.now().toString();
       
-                  Alerte alerte = new Alerte(savedDemande.getAdmin().getEmail(), message, "Nouvelle demande", date);
+                  Alerte alerte = new Alerte(user,savedDemande.getAdmin(), savedDemande.getAdmin().getEmail(), message, "Nouvelle demande", date);
                   emailService.sendSimpleMail(alerte);
+                  alerteRepository.save(alerte);
         
          
         
@@ -194,7 +194,6 @@ public class DemandeService {
             
             //  emailService.sendSimpleMail(alertesa);
     
-            //  alerteRepository.save(alertesa);
     
          return demande;
 
