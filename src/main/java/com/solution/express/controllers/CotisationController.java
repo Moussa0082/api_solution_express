@@ -137,18 +137,17 @@ public class CotisationController {
     }
 
 
-    //Ajouter user à une cotisation
-    // @PostMapping("/addUser")
-    // public ResponseEntity<Cotisation> addUserToCotisation(
-    //         @RequestBody Cotisation cotisation,
-    //         @RequestBody Utilisateur utilisateur) {
-    //     try {
-    //         Cotisation updatedCotisation = cotisationService.addUserToCotisation(cotisation, utilisateur);
-    //         return new ResponseEntity<>(updatedCotisation, HttpStatus.OK);
-    //     } catch (Exception e) {
-    //         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    //     }
-    // }
+    //Supprimer user d'un groupe cotisation
+    @DeleteMapping("/{cotisationId}/user/{userId}")
+    public ResponseEntity<String> removeUserFromCotisation(@PathVariable Integer cotisationId, @PathVariable Integer userId) {
+        try {
+            cotisationService.removeUserFromCotisation(cotisationId, userId);
+            return ResponseEntity.ok("Utilisateur retiré de la cotisation avec succès.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    
 
 
     

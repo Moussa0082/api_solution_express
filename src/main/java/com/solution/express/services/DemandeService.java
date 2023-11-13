@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +30,10 @@ import com.solution.express.models.Banque;
 import com.solution.express.models.Demande;
 import com.solution.express.models.TypeBanque;
 import com.solution.express.models.Utilisateur;
+import com.solution.express.repository.AdminRepository;
 import com.solution.express.repository.AgentRepository;
 import com.solution.express.repository.AlerteRepository;
+import com.solution.express.repository.BanqueRepository;
 import com.solution.express.repository.DemandeRepository;
 import com.solution.express.repository.TypeBanqueRepository;
 
@@ -56,6 +57,12 @@ public class DemandeService {
      @Autowired
      private AgentRepository agentRepository;
 
+     @Autowired
+     private BanqueRepository banqueRepository;
+
+     @Autowired
+     private AdminRepository adminRepository;
+
   //Faire demande
     public Demande createDemande(Demande demande, MultipartFile imageFile1, MultipartFile imageFile2, Utilisateur user) throws Exception {
             
@@ -73,8 +80,10 @@ public class DemandeService {
         LocalDate localDate2 = LocalDate.now();
         dateDemandeR = localDate2.toString();
         Demande existingDemande = demandeRepository.findByTypeBanqueAndUtilisateur(demande.getTypeBanque(), user);
-        
-            
+        Banque banque = banqueRepository.findById(demande.getTypeBanque().getBanque().getIdBanque()).orElseThrow(() -> new Exception("Banque introuvable"));
+        int adminId = banque.getAdmin().getIdAdmin();
+        Admin admin = adminRepository.findById(adminId).orElseThrow(() -> new Exception("Administrateur introuvable"));
+
         if (existingDemande != null) {
             //Envoi email
             String msg_aa = "Votre  demande de " + existingDemande.getTypeBanque().getNom() + " à la banque "  + existingDemande.getTypeBanque().getBanque().getNom()+
@@ -135,17 +144,7 @@ public class DemandeService {
         demande.setDateDemande(localDate.toString());
         demande.setHeureDemande(localTime.toString());
 
-        // Banque banque = demande.getTypeBanque().getBanque();
-
-        // if (banque != null) {
-        //     // Obtenez l'Admin associé à cette banque
-        //     Admin admin = banque.getAdmin();
-        //     demande.setAdmin(admin); // Associez l'Admin à la demande
-        // } else {
-        //     // Gérez le cas où aucune Banque n'est associée à ce TypeBanque
-        //     throw new IllegalArgumentException("Le TypeBanque de la demande n'est pas associé à une Banque.");
-        // }
-    
+       
         // Set the user's information to the demande's user fields
         demande.setUtilisateur(user);
         demande.setStatutDemande("en cours");
@@ -170,7 +169,14 @@ public class DemandeService {
         
         
         
+          String message = "Nouvelle demande de " + savedDemande.getTypeBanque().getNom() +
+            " a été effectuée par " + demande.getUtilisateur().getPrenom() + " " + savedDemande.getUtilisateur().getNom() +
+            ". Veuillez prendre des mesures pour traiter cette demande.";
+        String sujet = "Nouvelle Demande";
+        String date = LocalDate.now().toString();
 
+        Alerte alerte = new Alerte(admin.getEmail(), message, sujet, date);
+        emailService.sendSimpleMail(alerte);
         // String msg_ad = "L'utilisateur  "+savedDemande.getUtilisateur().getPrenom() + " " + savedDemande.getUtilisateur().getNom() +"a éffectué (e) une demande de " + savedDemande.getTypeBanque().getNom() +
         //         " ses documents ont été reçu avec succès veuiller charger un agent de traiter sa demande dans les plus bref délai " + "\n" +
         //         " Mr + "+ savedDemande.getTypeBanque().getBanque().getAdmin().getNom()+ " \n Merci !!!.";
