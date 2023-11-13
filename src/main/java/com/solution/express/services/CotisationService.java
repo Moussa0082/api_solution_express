@@ -84,7 +84,6 @@ public class CotisationService {
             cotisationExistant.setDateCreation(cotisation.getDateCreation());
             cotisationExistant.setDateFin(cotisation.getDateFin());
             // utilisateurExistant.setMotDePasse(utilisateur.getMotDePasse());
-            
 
             // Mettre à jour l'image si fournie
             if (imageFile != null) {
@@ -145,7 +144,7 @@ public class CotisationService {
     
         cotisation.getUtilisateur().remove(utilisateur);
         cotisationRepository.save(cotisation);
-    
+        
         // Envoi de l'e-mail à l'utilisateur supprimé
         String message = "Vous avez été retiré de la cotisation : " + cotisation.getNom();
         String sujet = "Retrait dans une groupe cotisation";
@@ -157,7 +156,7 @@ public class CotisationService {
     
 
 
-    //recuperer la liste des user
+    //recuperer la liste des cotisations
         public List<Cotisation> getAllCotisation(){
 
         List<Cotisation> cotisation = cotisationRepository.findAll();

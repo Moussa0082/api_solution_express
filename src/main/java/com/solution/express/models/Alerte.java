@@ -38,7 +38,7 @@ public class Alerte {
     private String email;
 
     
-
+    
     private String mesage;
 
     private String sujet;
@@ -62,19 +62,34 @@ public class Alerte {
       this.sujet = sujet;
       this.date = date;
     }
+
+    public Alerte(Utilisateur utilisateur,String email, String mesage, String sujet, String date,Admin admin){
+      this.email = email;
+      this.mesage = mesage;
+      this.sujet = sujet;
+      this.date = date;
+    }
     public Alerte(String email, String mesage, String sujet, String date){
       this.email = email;
       this.mesage = mesage;
       this.sujet = sujet;
       this.date = date;
     }
-    // public Alerte( Admin admin, String email, String mesage, String sujet, String date){
-    //   this.admin = admin;
-    //   this.email = email;
-    //   this.mesage = mesage;
-    //   this.sujet = sujet;
-    //   this.date = date;
-    // }
+    public Alerte( Admin admin, String email, String mesage, String sujet, String date){
+      this.admin = admin;
+      this.email = email;
+      this.mesage = mesage;
+      this.sujet = sujet;
+      this.date = date;
+    }
+
+    public Alerte( Utilisateur utilisateur,Admin admin, String email, String mesage, String sujet, String date){
+      this.admin = admin;
+      this.email = email;
+      this.mesage = mesage;
+      this.sujet = sujet;
+      this.date = date;
+    }
    
     
 }

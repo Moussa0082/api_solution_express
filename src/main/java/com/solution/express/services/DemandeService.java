@@ -10,11 +10,14 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +30,18 @@ import com.solution.express.models.Admin;
 import com.solution.express.models.Agent;
 import com.solution.express.models.Alerte;
 import com.solution.express.models.Banque;
+import com.solution.express.models.Cotisation;
 import com.solution.express.models.Demande;
 import com.solution.express.models.TypeBanque;
 import com.solution.express.models.Utilisateur;
-import com.solution.express.repository.AdminRepository;
 import com.solution.express.repository.AgentRepository;
 import com.solution.express.repository.AlerteRepository;
 import com.solution.express.repository.BanqueRepository;
 import com.solution.express.repository.DemandeRepository;
 import com.solution.express.repository.TypeBanqueRepository;
+import com.solution.express.repository.UtilisateurRepository;
 
+import aj.org.objectweb.asm.Type;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -55,17 +60,16 @@ public class DemandeService {
      private TypeBanqueRepository typeBanqueRepository;
 
      @Autowired
+     private UtilisateurRepository utilisateurRepository;
+
+     @Autowired
      private AgentRepository agentRepository;
 
-     @Autowired
-     private BanqueRepository banqueRepository;
 
-     @Autowired
-     private AdminRepository adminRepository;
 
   //Faire demande
     public Demande createDemande(Demande demande, MultipartFile imageFile1, MultipartFile imageFile2, Utilisateur user) throws Exception {
-            
+        
         // Générer un numéro de demande aléatoire
         String numeroDemande = generateRandomId();
         // Modifier le format du numéro de demande pour qu'il contienne trois chiffres et trois lettres
@@ -79,10 +83,11 @@ public class DemandeService {
         String dateDemandeR;
         LocalDate localDate2 = LocalDate.now();
         dateDemandeR = localDate2.toString();
+
+        TypeBanque typeBanque = typeBanqueRepository.findById(demande.getTypeBanque().getIdTypeBanque()).orElse(null);
         Demande existingDemande = demandeRepository.findByTypeBanqueAndUtilisateur(demande.getTypeBanque(), user);
-        Banque banque = banqueRepository.findById(demande.getTypeBanque().getBanque().getIdBanque()).orElseThrow(() -> new Exception("Banque introuvable"));
-        int adminId = banque.getAdmin().getIdAdmin();
-        Admin admin = adminRepository.findById(adminId).orElseThrow(() -> new Exception("Administrateur introuvable"));
+        
+        
 
         if (existingDemande != null) {
             //Envoi email
@@ -144,47 +149,43 @@ public class DemandeService {
         demande.setDateDemande(localDate.toString());
         demande.setHeureDemande(localTime.toString());
 
-       
+    
         // Set the user's information to the demande's user fields
         demande.setUtilisateur(user);
+        demande.setAdmin(typeBanque.getBanque().getAdmin());
         demande.setStatutDemande("en cours");
 
-        // if(existingDemandes != null){
-
-        // }
+        
         String dateDemande;
         LocalDate localDate3 = LocalDate.now();
         dateDemande = localDate3.toString();
+
         // Save the demande to the database
         Demande savedDemande = demandeRepository.save(demande);
-        String msg_a = "Votre  demande de " + savedDemande.getTypeBanque().getNom() +
-        " a été envoyée avec succès " + "\n" +
-        " Veuillez patienter le temps qu'un de nos agents s'occupe de traitement \n de votre demande.";
+        
+        String msg_a = "Votre  demande de " + typeBanque.getNom() +
+        " a été envoyée avec succès  à la banque "+ typeBanque.getBanque().getNom() + "\n" +
+        " Veuillez patienter le temps qu'un de nos agents s'occupe de traitement \n de votre demande  Merci !!!..";
         Alerte alertes = new Alerte(user,savedDemande.getUtilisateur().getEmail(), msg_a, "Alerte reception de demande", dateDemande);
+        // Alerte alertes = new Alerte(user,savedDemande.getUtilisateur().getEmail(), msg_a, "Alerte reception de demande", dateDemande);
         // Alerte alertes = new Alerte(user,demande.getUtilisateur().getEmail(), msg_a, "Alerte reception de demande", dateDemande);
         
         emailService.sendSimpleMail(alertes);
-    
         alerteRepository.save(alertes);
         
-        
-        
-          String message = "Nouvelle demande de " + savedDemande.getTypeBanque().getNom() +
-            " a été effectuée par " + demande.getUtilisateur().getPrenom() + " " + savedDemande.getUtilisateur().getNom() +
-            ". Veuillez prendre des mesures pour traiter cette demande.";
-        String sujet = "Nouvelle Demande";
-        String date = LocalDate.now().toString();
 
-        Alerte alerte = new Alerte(admin.getEmail(), message, sujet, date);
-        emailService.sendSimpleMail(alerte);
-        // String msg_ad = "L'utilisateur  "+savedDemande.getUtilisateur().getPrenom() + " " + savedDemande.getUtilisateur().getNom() +"a éffectué (e) une demande de " + savedDemande.getTypeBanque().getNom() +
-        //         " ses documents ont été reçu avec succès veuiller charger un agent de traiter sa demande dans les plus bref délai " + "\n" +
-        //         " Mr + "+ savedDemande.getTypeBanque().getBanque().getAdmin().getNom()+ " \n Merci !!!.";
-        // Alerte alertesa = new Alerte(user,demande.getTypeBanque().getBanque().getAdmin().getEmail(), msg_ad, "Reception de demande", dateDemande);
-            
-        //      emailService.sendSimpleMail(alertesa);
+             // Envoi d'un e-mail à l'administrateur
+       String message = "L'utilisateur  "+ savedDemande.getUtilisateur().getPrenom() + " " + savedDemande.getUtilisateur().getNom() +"a éffectué (e) une demande de " + typeBanque.getNom() +
+                  " ses documents ont été reçu avec succès veuiller charger un agent de traiter sa demande dans les plus bref délai " +
+                  " Mr  "+ savedDemande.getAdmin().getNom()+ " \n Merci !!!.";
+                   
+                  String date = LocalDate.now().toString();
+      
+                  Alerte alerte = new Alerte(user,savedDemande.getAdmin(), savedDemande.getAdmin().getEmail(), message, "Nouvelle demande", date);
+                  emailService.sendSimpleMail(alerte);
+                  alerteRepository.save(alerte);
+ 
     
-        //      alerteRepository.save(alertesa);
     
          return demande;
 
@@ -205,19 +206,56 @@ public class DemandeService {
     
     
 
+  //Alerter les agents et attribution d'une demande à un agent 
+  public Demande attribuerDemandeAAgent(int demandeId, int agentId) {
+    Demande demande = demandeRepository.findById(demandeId).orElse(null);
+    Agent agent = agentRepository.findById(agentId).orElse(null);
+
+        String dateDemande;
+        LocalDate localDate3 = LocalDate.now();
+        dateDemande = localDate3.toString();
+    if (demande != null && agent != null) {
+        // Assigner la demande à l'agent
+        demande.setAgentCharger(agent);
+        Demande savedDemande = demandeRepository.save(demande);
+
+        // Envoyer un e-mail à l'agent attribué
+        String messageToAssignedAgent = "Mr "+ savedDemande.getAgentCharger().getPrenom().toUpperCase() + " "+ savedDemande.getAgentCharger().getNom().toUpperCase() + " Vous avez été chargé de traiter la demande de l'utilisateur " +
+                savedDemande.getUtilisateur().getPrenom() + " " + savedDemande.getUtilisateur().getNom()+" pour une demande de " + savedDemande.getTypeBanque().getNom()  + ". Veuillez agir dans les plus brefs délais.";
+      Alerte al = new Alerte(savedDemande.getAgentCharger().getEmail(),"Nouvelle demande attribuée", messageToAssignedAgent, dateDemande);
+        emailService.sendSimpleMail(al);
+
+        // Récupérer tous les agents de la banque
+        List<Agent> allAgents = agentRepository.findAllByBanque(agent.getBanque());
+
+        // Envoyer un e-mail aux autres agents de la banque
+        for (Agent otherAgent : allAgents) {
+            if (!otherAgent.equals(agent)) {
+                String messageToOtherAgents = "Cher " + otherAgent.getPrenom().toUpperCase() + ",\n" +
+                        "Une nouvelle demande a été attribuée à l'agent " + agent.getPrenom().toUpperCase() + " " + agent.getNom().toUpperCase() +
+                        "Veuillez noter que vous n'êtes pas responsable de cette demande.";
+                        Alerte alAuxAutresAgent = new Alerte(otherAgent.getEmail(), "Nouvelle demande attribuée", messageToOtherAgents,dateDemande);
+                emailService.sendSimpleMail(alAuxAutresAgent);
+            }
+        }
+
+        return savedDemande;
+    }
+    return null;
+}
 
 
+    //Recuperer la liste des demande par banque
+    // public List<Demande> getAllDemandeByBanque(Integer idBanque){
+    //     List<Demande>  Demande = demandeRepository.findByIdBanque(idBanque);  //Repository nom a corriger
 
-    //  public List<Demande> getAllDemande(){
+    //     if(Demande.isEmpty()){
+    //         throw new EntityNotFoundException("Aucune demande trouvé");
+    //     }
 
-    //     List<Demande> demandes = demandeRepository.findAll();
-    //     if (demandes.isEmpty())
-    //         throw new NoContentException("Aucune demande trouvé");
-    //     return demandes;
+    //     return Demande;
     // }
 
-
-    //////////
 
     public ResponseEntity<List<Demande>> getAllDemande() {
         try {
@@ -277,6 +315,46 @@ public class DemandeService {
         return validatedDemande;
     }
     
+
+    public Demande annulerDemande(Integer demandeId, Integer idUtilisateur)  {
+        // Find the demande by its ID
+        Demande demande = demandeRepository.findById(demandeId).orElse(null);
+        if (demande == null) {
+            throw new RuntimeException("Demande not found");
+        }
+
+         // Check if the demande is already validated
+    if ("annulée".equals(demande.getStatutDemande())) {
+        throw new RuntimeException("Cette demande a déjà été annuléé.");
+    }
+
+    
+        // Set the demande's status to "validé"
+        demande.setStatutDemande("annulée");
+    
+        // Find and associate agents with the demande
+        Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur).orElse(null);
+        if (utilisateur == null) {
+            throw new RuntimeException("Demande non trouvé");
+        }
+        
+        // Clear existing agents and add the new agent
+        // demande.getAgent().clear();
+        
+       
+        // Save the updated demande
+        Demande cancelDemande = demandeRepository.save(demande);
+    
+        // Send an email notification to the user
+        String date = LocalDate.now().toString();
+        String message = "Votre demande "+" " + cancelDemande.getTypeBanque().getNom() +" à la banque "+ cancelDemande.getTypeBanque().getBanque().getNom()+ " " +" a été annulée, si vous vouler faire une autre \n demande vous pouvez le faire à nouveau .";
+        Alerte alerte = new Alerte(cancelDemande.getUtilisateur().getEmail(), message, "Annulation de demande", date);
+        emailService.sendSimpleMail(alerte);
+
+
+    
+        return cancelDemande;
+    }
 
 
 
