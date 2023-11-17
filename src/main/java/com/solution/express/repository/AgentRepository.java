@@ -1,10 +1,12 @@
 package com.solution.express.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.solution.express.models.Agent;
+import com.solution.express.models.Banque;
 
 public interface AgentRepository extends JpaRepository<Agent, Integer>{
 
@@ -13,6 +15,7 @@ public interface AgentRepository extends JpaRepository<Agent, Integer>{
     Agent findByEmail(String mail);
 
     Agent findByMotDePasseAndEmail(String motdepasse, String email);
+    List<Agent> findAllByBanque(Banque banque);
 
     
 }

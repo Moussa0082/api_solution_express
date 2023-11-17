@@ -59,14 +59,15 @@ public class Utilisateur {
     private List<Cotisation> cotisation;
   
     //Pour afficher la liste des raports elaborer par un user specifique
-    @OneToMany
-    (mappedBy="utilisateur", cascade = CascadeType.ALL)
-    private List<Rapport> rapport;
+    
+    // @OneToMany
+    // (mappedBy="utilisateur", cascade = CascadeType.ALL)
+    // private List<Rapport> rapport;
     
     // //Pour afficher la liste des evenements planifier par un user specifique
-    @OneToMany
-     (mappedBy="utilisateur", cascade = CascadeType.ALL)
-    private List<Evenement> evenement;
+    // @OneToMany
+    //  (mappedBy="utilisateur", cascade = CascadeType.ALL)
+    // private List<Evenement> evenement;
 
     
 }

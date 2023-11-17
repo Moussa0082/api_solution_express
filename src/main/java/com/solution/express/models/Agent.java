@@ -55,7 +55,7 @@ public class Agent {
     @ManyToMany
     (mappedBy = "agent", cascade = CascadeType.ALL)
     @JsonIgnore
-    Set<Demande> demande;
+    private List<Demande> demande;
 
     
 }

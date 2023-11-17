@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.solution.express.Exceptions.NoContentException;
+import com.solution.express.models.Alerte;
 import com.solution.express.models.Banque;
 import com.solution.express.models.Cotisation;
 import com.solution.express.models.Utilisateur;
@@ -35,6 +37,9 @@ public class CotisationService {
 
     @Autowired
     private UtilisateurRepository utilisateurRepositoy;
+
+    @Autowired
+    private EmailService emailService;
 
     public Cotisation createCotisation(Cotisation cotisation, MultipartFile imageFile) throws Exception {
         if (cotisationRepository.findByNom(cotisation.getNom()) == null) {
@@ -79,7 +84,6 @@ public class CotisationService {
             cotisationExistant.setDateCreation(cotisation.getDateCreation());
             cotisationExistant.setDateFin(cotisation.getDateFin());
             // utilisateurExistant.setMotDePasse(utilisateur.getMotDePasse());
-            
 
             // Mettre à jour l'image si fournie
             if (imageFile != null) {
@@ -110,13 +114,49 @@ public class CotisationService {
             throw new Exception("L'utilisateur est déjà membre de la cotisation");
         }
 
+         List<Utilisateur> nouveauxUtilisateurs = new ArrayList<>();
+
+    if (!cotisation.getUtilisateur().contains(utilisateur)) {
         cotisation.getUtilisateur().add(utilisateur);
+        nouveauxUtilisateurs.add(utilisateur);
         cotisationRepository.save(cotisation);
     }
 
+    for (Utilisateur nouvelUtilisateur : nouveauxUtilisateurs) {
+        String message = "Vous avez été ajouté à la cotisation : " + cotisation.getNom();
+        String sujet = "Ajout à une cotisation";
+        String date = LocalDate.now().toString();
+
+        Alerte alerte = new Alerte(nouvelUtilisateur.getEmail(), message, sujet, date);
+        emailService.sendSimpleMail(alerte);
+    }
+    }
 
 
-    //recuperer la liste des user
+    //delete user form groupe
+    public void removeUserFromCotisation(int cotisationId, int userId) throws Exception {
+        Cotisation cotisation = cotisationRepository.findById(cotisationId).orElseThrow(() -> new Exception("Cotisation introuvable"));
+        Utilisateur utilisateur = utilisateurRepositoy.findById(userId).orElseThrow(() -> new Exception("Utilisateur introuvable"));
+    
+        if (!cotisation.getUtilisateur().contains(utilisateur)) {
+            throw new Exception("L'utilisateur n'est pas membre de la cotisation");
+        }
+    
+        cotisation.getUtilisateur().remove(utilisateur);
+        cotisationRepository.save(cotisation);
+        
+        // Envoi de l'e-mail à l'utilisateur supprimé
+        String message = "Vous avez été retiré de la cotisation : " + cotisation.getNom();
+        String sujet = "Retrait dans une groupe cotisation";
+        String date = LocalDate.now().toString();
+    
+        Alerte alerte = new Alerte(utilisateur.getEmail(), message, sujet, date);
+        emailService.sendSimpleMail(alerte);
+    }
+    
+
+
+    //recuperer la liste des cotisations
         public List<Cotisation> getAllCotisation(){
 
         List<Cotisation> cotisation = cotisationRepository.findAll();

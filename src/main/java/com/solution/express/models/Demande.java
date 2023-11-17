@@ -46,9 +46,10 @@ public class Demande {
 
     private String photoValide;
 
-    private Boolean statutDemande = false;
+    @Column
+    private String statutDemande;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String numeroUser;
     
     @Column(nullable = false)
@@ -81,16 +82,24 @@ public class Demande {
     @JoinColumn(name = "idTypeBanque")
     private TypeBanque typeBanque;
 
+    @ManyToOne
+    @JoinColumn(name = "idAdmin")
+    private Admin admin;
+
     // //Liaison agent à la demande pour voir l'agent qui s'occuper de la demande
     @ManyToMany
     @JoinColumn(name = "idAgent")
     // @JsonIgnore
     // (mappedBy = "idAgent", cascade = CascadeType.ALL)
-    Set<Agent> agent;
+    private List<Agent> agent;
 
     // //Lier l'id de l'utilisateur à la demande pour voir l'utilisateur qui a effectué la demande
     @ManyToOne
     // @JsonIgnore
     private Utilisateur utilisateur;
+
+    @ManyToOne
+    // @JsonIgnore
+    private Agent agentCharger;
 
 }

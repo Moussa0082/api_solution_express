@@ -14,9 +14,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Admin {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,15 +47,27 @@ public class Admin {
     (mappedBy="admin")
     @JsonIgnore
     private  List<Agent> agent;
+    
+    @OneToMany
+    (mappedBy="admin")
+    @JsonIgnore
+    private  List<Alerte> alerte;
+    
+    @OneToMany
+    (mappedBy="admin")
+    @JsonIgnore
+    private  List<Demande> demande;
 
     //Liaison superadmin à admin
     @ManyToOne
     @JoinColumn(name = "idSuperAdmin")
+    @JsonIgnore
     private SuperAdmin superAdmin;
 
     // Liaison  banque à admin 
     @OneToOne 
     @JoinColumn(name = "idBanque")
+    @JsonIgnore
     private Banque banque;
     
 }

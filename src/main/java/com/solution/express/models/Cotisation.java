@@ -79,6 +79,6 @@ public class Cotisation {
     @OneToMany
     (mappedBy="cotisation", cascade = CascadeType.ALL)
    // @JsonIgnoreProperties(value = {"utiliateur"})
-    private  List<Rapport> Evenement;
+    private  List<Evenement> evenement;
     
 }
