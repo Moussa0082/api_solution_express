@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.solution.express.Exceptions.NoContentException;
 import com.solution.express.models.Admin;
 import com.solution.express.models.Agent;
 import com.solution.express.models.Utilisateur;
@@ -182,6 +183,21 @@ public class AgentService {
         } else {
             return new ResponseEntity<>("Agent non trouvé avec l'ID " + id, HttpStatus.BAD_REQUEST);
         }
+    }
+
+
+     //Se connecter 
+      public Agent connexionAent(String email, String motdepasse){
+        Agent agent = agentRepository.findByMotDePasseAndEmail(motdepasse, email);
+        if(agent == null)
+        {
+            throw new NoContentException("Connexion échoué!");
+        }
+        if(agent.getIsActive()==false)
+        {
+            throw new NoContentException("Connexion échoué votre compte  été desactivé par l'administrateur!");
+        }
+         return agent;
     }
    
 }

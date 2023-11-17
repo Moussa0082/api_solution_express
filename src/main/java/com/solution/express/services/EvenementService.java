@@ -24,10 +24,10 @@ public class EvenementService {
 
     //Methode pour créer un super admin 
      public ResponseEntity<String> createEvenement(Evenement evenement) {
-         if (evenementRepository.findByNomAndDateEvenement(evenement.getNomEvenement(), evenement.getDateEvenement())) {
+         if (evenementRepository.findByNomEvenementAndDateEvenement(evenement.getNomEvenement(), evenement.getDateEvenement())) {
              evenementRepository.save(evenement);
 
-             return new ResponseEntity<>("Evenement jouter avec succès", HttpStatus.CREATED);
+             return new ResponseEntity<>("Evenement ajouter avec succès", HttpStatus.CREATED);
             } else {
                 
                 return new ResponseEntity<>("L'evenement "+ evenement.getNomEvenement() + "ne peut pas etre ajouter" + "2 fois à la meme date le" + evenement.getDateEvenement() , HttpStatus.BAD_REQUEST);

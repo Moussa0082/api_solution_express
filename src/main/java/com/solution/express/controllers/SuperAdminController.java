@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.solution.express.models.Admin;
 import com.solution.express.models.SuperAdmin;
 import com.solution.express.repository.SuperAdminRepository;
 import com.solution.express.services.SuperAdminService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/superAdmin")
@@ -68,6 +72,15 @@ public class SuperAdminController {
           return "Super Admin non existant avec l'ID " + id;
       }
     }
+
+
+    //Se connecter 
+           @GetMapping("/login")
+           @Operation(summary = "Connexion d'un Admin ")
+           public SuperAdmin connexion(@RequestParam("email")  String email,
+                                   @RequestParam("motDePasse")  String motdepasse) {
+               return superAdminService.connexionSuperAdmin(email, motdepasse);
+           }
 
     
 }

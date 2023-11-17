@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.solution.express.models.Admin;
 import com.solution.express.models.Agent;
 import com.solution.express.models.Utilisateur;
 import com.solution.express.repository.AgentRepository;
@@ -31,6 +33,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin( origins = "*")
 @RequestMapping("/agent")
 public class AgentController {
  
@@ -130,6 +133,16 @@ public class AgentController {
                agentService.enableAgent(id);
                return new ResponseEntity<>("Agent activer avec succes", HttpStatus.ACCEPTED);
            }
+
+
+           //Se connecter 
+           @GetMapping("/login")
+           @Operation(summary = "Connexion d'un agent ")
+           public Agent connexion(@RequestParam("email")  String email,
+                                   @RequestParam("motDePasse")  String motdepasse) {
+               return agentService.connexionAent(email, motdepasse);
+           }
+
 
     }
 

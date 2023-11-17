@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.solution.express.Exceptions.NoContentException;
+import com.solution.express.models.Admin;
 import com.solution.express.models.SuperAdmin;
 import com.solution.express.repository.SuperAdminRepository;
 
@@ -78,7 +80,16 @@ public class SuperAdminService {
         return superAdminRepository.existsByEmail(email);
     }
 
-
+     //Se connecter 
+      public SuperAdmin connexionSuperAdmin(String email, String motdepasse){
+        SuperAdmin superAdmin = superAdminRepository.findByMotDePasseAndEmail(motdepasse, email);
+        if(superAdmin == null)
+        {
+            throw new NoContentException("Connexion échoué!");
+        }
+       
+         return superAdmin;
+    }
     
     
 }

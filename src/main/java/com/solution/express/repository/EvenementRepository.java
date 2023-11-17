@@ -9,7 +9,7 @@ import com.solution.express.models.Utilisateur;
 
 public interface EvenementRepository extends JpaRepository<Evenement,Integer>{
 
-    boolean findByNomAndDateEvenement(String nomEvenment, String dateEvenement);
+    boolean findByNomEvenementAndDateEvenement(String nomEvenment, String dateEvenement);
 
     // String findEvenementByDescriptionAndNom(String nomEvenement, String Description);
     // Evenement findEvenementByUtilisateurAndIdEvenement(Utilisateur utilisateur, String nomEvenement);

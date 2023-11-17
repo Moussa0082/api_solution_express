@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.solution.express.Exceptions.NoContentException;
 import com.solution.express.models.Admin;
 import com.solution.express.models.Agent;
 import com.solution.express.models.Utilisateur;
@@ -110,14 +111,14 @@ public class AdminService {
     }
 
      //Recuperer la liste des Admins
-      public ResponseEntity<List<Admin>> getAllAdmin() {
-     
-       try {
-            return new ResponseEntity<>(adminRepository.findAll(), HttpStatus.OK);
-        } catch (Exception e) {
-             e.printStackTrace();
+     public List<Admin> getAllAdmin(){
+
+        List<Admin> admin = adminRepository.findAll();
+        if (admin.isEmpty())
+        {
+            throw new NoContentException("Aucun admin trouvé");
         }
-       return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+        return admin;
     }
 
     //Desactiver un admin
@@ -156,6 +157,21 @@ public class AdminService {
              return "Admin non existant.";
          }
      }
+
+
+     //Se connecter 
+      public Admin connexionAdmin(String email, String motdepasse){
+        Admin admin = adminRepository.findByMotDePasseAndEmail(motdepasse, email);
+        if(admin == null)
+        {
+            throw new NoContentException("Connexion échoué!");
+        }
+        if(admin.getIsActive()==false)
+        {
+            throw new NoContentException("Connexion échoué votre compte  été desactivé par l'administrateur!");
+        }
+         return admin;
+    }
 
 
 }
