@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.solution.express.Exceptions.NoContentException;
 import com.solution.express.models.Admin;
 import com.solution.express.models.Agent;
+import com.solution.express.models.Alerte;
 import com.solution.express.models.Utilisateur;
 import com.solution.express.repository.AgentRepository;
 
@@ -28,7 +31,9 @@ public class AgentService {
 
   @Autowired
   private AgentRepository agentRepository;
-
+ 
+  @Autowired
+  private EmailService emailService;
 
 
     //creer un agent
@@ -141,7 +146,11 @@ public class AgentService {
         if (agent.isPresent()) {
             agent.get().setIsActive(false);
             agentRepository.save(agent.get());
+            Alerte alerte = new Alerte(agent.get().getEmail(), "Votre compte a été desactiver par l'administrateur", "Désactivation de compte");
+            emailService.sendSimpleMail(alerte);
             return new ResponseEntity<>("L'agent " + agent.get().getPrenom() + " " + agent.get().getNom() + " a été désactivé avec succès", HttpStatus.OK);
+            
+            
         } else {
             return new ResponseEntity<>("Agent non trouvé avec l'ID " + id, HttpStatus.BAD_REQUEST);
         }
@@ -153,6 +162,8 @@ public class AgentService {
         if (agent.isPresent()) {
             agent.get().setIsActive(true);
             agentRepository.save(agent.get());
+             Alerte alerte = new Alerte(agent.get().getEmail(), "Votre compte a été activé par l'administrateur vous pouvez acceder votre compte\n et commencer a traiter les demandes clients", "Activation de compte");
+            emailService.sendSimpleMail(alerte);
             return new ResponseEntity<>("L'agent " + agent.get().getPrenom() + " " + agent.get().getNom() + " a été activé avec succès", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Agent non trouvé avec l'ID " + id, HttpStatus.BAD_REQUEST);

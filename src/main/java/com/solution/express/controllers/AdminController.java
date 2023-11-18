@@ -95,7 +95,7 @@ public class AdminController {
     }
 
    
-    @PatchMapping("/disable/{id}")
+    @PutMapping("/disable/{id}")
     //Desactiver un admin methode
     public ResponseEntity <String> disableAdmin(@PathVariable Integer id){
     
@@ -104,7 +104,7 @@ public class AdminController {
     }
 
     //Aciver admin
-      @PatchMapping("/enable/{id}")
+      @PutMapping("/enable/{id}")
     //Desactiver un admin methode
     public ResponseEntity <String> enableAdmin(@PathVariable Integer id){
     

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.solution.express.Exceptions.NoContentException;
 import com.solution.express.models.Admin;
 import com.solution.express.models.Agent;
+import com.solution.express.models.Alerte;
 import com.solution.express.models.Utilisateur;
 import com.solution.express.repository.AdminRepository;
 
@@ -28,6 +29,10 @@ public class AdminService {
 
     @Autowired
     private AdminRepository adminRepository;
+
+    @Autowired
+    private
+    EmailService emailService;
 
     //créer un admin
       public Admin createAdmin(Admin admin, MultipartFile imageFile) throws Exception {
@@ -128,6 +133,8 @@ public class AdminService {
         if (admin.isPresent()) {
             admin.get().setIsActive(false);
             adminRepository.save(admin.get());
+            Alerte alerte = new Alerte(admin.get().getEmail(), "Votre compte a été desactivé par le super admin vous ne pouvez plus acceder à votre compte " + "\n de la banque " + admin.get().getBanque().getNom() + " en tant qu'administrateur", "Desactivation de compte");
+            emailService.sendSimpleMail(alerte);
             return new ResponseEntity<>("L'admin " + admin.get().getPrenom() + " " + admin.get().getNom() + " a été désactivé avec succès", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Admin non trouvé avec l'ID " + id, HttpStatus.BAD_REQUEST);
@@ -140,6 +147,8 @@ public class AdminService {
         if (admin.isPresent()) {
             admin.get().setIsActive(true);
             adminRepository.save(admin.get());
+             Alerte alerte = new Alerte(admin.get().getEmail(), "Votre compte a été activé par le super admin vous pouvez acceder votre compte\n et commencer a effectuer vos taches quotidiennes" + "\n au niveau de la banque " + admin.get().getBanque().getNom() + "sur notre plateforme" , "Activation de compte");
+            emailService.sendSimpleMail(alerte);
             return new ResponseEntity<>("L'admin " + admin.get().getPrenom() + " " + admin.get().getNom() + " a été activé avec succès", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Admin non trouvé avec l'ID " + id, HttpStatus.BAD_REQUEST);

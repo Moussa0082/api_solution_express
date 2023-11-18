@@ -117,7 +117,7 @@ public class AgentController {
              }
            }
 
-           @PatchMapping("/disable/{id}")
+           @PutMapping("/disable/{id}")
            //Desactiver un admin methode
            public ResponseEntity <String> disableAgent(@PathVariable Integer id){
            
@@ -126,7 +126,7 @@ public class AgentController {
            }
        
            //Aciver admin
-             @PatchMapping("/enable/{id}")
+             @PutMapping("/enable/{id}")
            //Desactiver un admin methode
            public ResponseEntity <String> enableAgent(@PathVariable Integer id){
            

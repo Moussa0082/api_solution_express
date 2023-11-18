@@ -1,5 +1,6 @@
 package com.solution.express.models;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +75,11 @@ public class Alerte {
       this.mesage = mesage;
       this.sujet = sujet;
       this.date = date;
+    }
+    public Alerte(String email, String mesage, String sujet){
+      this.email = email;
+      this.mesage = mesage;
+      this.sujet = sujet;
     }
     public Alerte( Admin admin, String email, String mesage, String sujet, String date){
       this.admin = admin;
