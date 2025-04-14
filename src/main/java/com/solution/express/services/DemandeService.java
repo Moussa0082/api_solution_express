@@ -108,8 +108,8 @@ public class DemandeService {
     
         // Traitement du fichier image 1
         if (imageFile1 != null) {
-            String imageLocation = "C:\\xampp\\htdocs\\solution_express";
             // String imageLocation = "C:\\xampp\\htdocs\\solution_express";
+            String imageLocation = "C:\\xampp\\htdocs\\solution_express";
             try {
                 Path imageRootLocation = Paths.get(imageLocation);
                 if (!Files.exists(imageRootLocation)) {
@@ -119,7 +119,7 @@ public class DemandeService {
                 String imageName1 = UUID.randomUUID().toString() + "_" + imageFile1.getOriginalFilename();
                 Path imagePath1 = imageRootLocation.resolve(imageName1);
                 Files.copy(imageFile1.getInputStream(), imagePath1, StandardCopyOption.REPLACE_EXISTING);
-                demande.setPhotoDidentite("http://localhost/solution/"+imageName1);
+                demande.setPhotoDidentite("solution/"+imageName1);
             } catch (IOException e) {
                 throw new Exception("Erreur lors du traitement du fichier image 1 : " + e.getMessage());
             }
@@ -137,7 +137,7 @@ public class DemandeService {
                 String imageName2 = UUID.randomUUID().toString() + "_" + imageFile2.getOriginalFilename();
                 Path imagePath2 = imageRootLocation.resolve(imageName2);
                 Files.copy(imageFile2.getInputStream(), imagePath2, StandardCopyOption.REPLACE_EXISTING);
-                demande.setPhotoValide("http://localhost/solution/"+ imageName2);
+                demande.setPhotoValide("solution/"+ imageName2);
             } catch (IOException e) {
                 throw  new Exception("Erreur lors du traitement du fichier image 2 : " + e.getMessage());
             }
@@ -255,7 +255,10 @@ public class DemandeService {
 
     //     return Demande;
     // }
-
+     
+    // public Long getNombreDemandesValidees() {
+    //     return demandeRepository.countByStatutDemande("validé");
+    // }
 
     public ResponseEntity<List<Demande>> getAllDemande() {
         try {

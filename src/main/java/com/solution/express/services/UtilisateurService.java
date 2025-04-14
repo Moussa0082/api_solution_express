@@ -1,5 +1,6 @@
 package com.solution.express.services;
 
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,12 +46,12 @@ public class UtilisateurService {
                     String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                     Path imagePath = imageRootLocation.resolve(imageName);
                     Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-                    utilisateur.setImage("http://localhost/solution_express\\images" + imageName);
+                    utilisateur.setImage("solution_express/" + imageName);
                 } catch (IOException e) {
                     throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
                 }
             }
-    
+          
          
     
             return utilisateurRepository.save(utilisateur);
@@ -136,6 +137,16 @@ public class UtilisateurService {
          }
      }
 
+
+     public Utilisateur connectionUtilisateur(String email, String motDePasse) {
+        Utilisateur user = utilisateurRepository.findByEmailAndMotDePasse(email, motDePasse);
+        if (user == null) {
+            throw new EntityNotFoundException("Cet utilisateur n'existe pas");
+        }
+
+        return user;
+    }
+   
     //Methode se connecter
     // public Utilisateur connectionUtilisateur(String email, String motDePasse) {
     //     // Utilisateur utilisateur;

@@ -101,6 +101,7 @@ public class TypeBanqueController {
     public ResponseEntity<?> getTypeBanqueById(@PathVariable Integer id) {
         return typeBanqueService.findById(id);
     }
+    
 
 
         //Supprimer un utilisateur

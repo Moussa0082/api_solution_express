@@ -133,7 +133,10 @@ public ResponseEntity<Demande> createDemande(
  }
 
 
-
+//  @GetMapping("/nomreValide")
+//  public Long getNombreDemandesValidees() {
+//      return demandeService.getNombreDemandesValidees();
+//  }
 
 
     @GetMapping("/listU/{idUtilisateur}")

@@ -51,6 +51,7 @@ public class TypeBanqueService {
     
         // Traitement image
         if (imageFile != null) {
+            // String imageLocation = "C:\\Users\\bane8\\OneDrive\\Bureau\\Express Solution\\api_solution_express";
             String imageLocation = "C:\\xampp\\htdocs\\solution_express";
             try {
                 Path imageRootLocation = Paths.get(imageLocation);
@@ -61,7 +62,7 @@ public class TypeBanqueService {
                 String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                 Path imagePath = imageRootLocation.resolve(imageName);
                 Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-                typeBanque.setImage("http://localhost/solution_express\\images" + imageName);
+                typeBanque.setImage("solution_express/" + imageName);
             } catch (IOException e) {
                 throw new Exception("Error processing the image file: " + e.getMessage());
             }
@@ -122,12 +123,13 @@ public class TypeBanqueService {
     
             // Mettre à jour l'image si fournie
             if (imageFile != null) {
+                // String emplacementImage = "C:\\Users\\bane8\\OneDrive\\Bureau\\Express Solution\\api_solution_express";
                 String emplacementImage = "C:\\xampp\\htdocs\\solution_express";
                 String nomImage = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                 Path cheminImage = Paths.get(emplacementImage).resolve(nomImage);
     
                 Files.copy(imageFile.getInputStream(), cheminImage, StandardCopyOption.REPLACE_EXISTING);
-                typeBanqueExistant.setImage("http://localhost/solution\\express\\images" + nomImage);
+                typeBanqueExistant.setImage("solution_express/" + nomImage);
             }
     
             // Enregistrer le type de banque mis à jour

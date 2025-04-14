@@ -65,7 +65,7 @@ public class Cotisation {
     private List<Utilisateur> utilisateur;
 
 
-    // //Pour afficher la liste des paiements liée à la cotisation
+     //Pour afficher la liste des paiements liée à la cotisation
      @OneToMany
      (mappedBy="cotisation", cascade = CascadeType.ALL)
     // @JsonIgnoreProperties(value = {"utiliateur"})

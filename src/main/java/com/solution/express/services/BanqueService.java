@@ -39,6 +39,7 @@ public class BanqueService {
     
             // Traitement du fichier image
             if (imageFile != null) {
+                // String imageLocation = "C:\\Users\\bane8\\OneDrive\\Bureau\\Express Solution\\api_solution_express";
                 String imageLocation = "C:\\xampp\\htdocs\\solution_express";
                 try {
                     Path imageRootLocation = Paths.get(imageLocation);
@@ -49,7 +50,7 @@ public class BanqueService {
                     String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                     Path imagePath = imageRootLocation.resolve(imageName);
                     Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-                    banque.setImage("http://localhost/solution_express\\images" + imageName);
+                    banque.setImage("solution_express/" + imageName);
                 } catch (IOException e) {
                     throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
                 }
@@ -90,12 +91,12 @@ public class BanqueService {
 
             // Mettre à jour l'image si fournie
             if (imageFile != null) {
-                String emplacementImage = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                String emplacementImage = "C:\\xampp\\htdocs\\solution_express";
                 String nomImage = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                 Path cheminImage = Paths.get(emplacementImage).resolve(nomImage);
 
                 Files.copy(imageFile.getInputStream(), cheminImage, StandardCopyOption.REPLACE_EXISTING);
-                banqueExistant.setImage("http://localhost/solution\\express\\images" + nomImage);
+                banqueExistant.setImage("solution/" + nomImage);
             }
             
             // Enregistrer la banque mise à jour

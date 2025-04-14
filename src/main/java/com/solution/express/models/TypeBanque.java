@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -20,6 +21,8 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
 
+
+// entite 
 @Entity
 @Data
 public class TypeBanque {
@@ -44,7 +47,7 @@ public class TypeBanque {
     //Joindre le superadmin à la baqnque l'id du super admin pour connaitre le super admin qui l'a crée
     @ManyToOne
     @JoinColumn(name="idSuperAdmin")
-    @JsonIgnoreProperties(value = {"demande"})
+    @JsonIgnore
     private SuperAdmin superAdmin;
     
     // //Joindre la banque a son type
@@ -56,7 +59,7 @@ public class TypeBanque {
     // //Liste des demandes dans le type
     @OneToMany
     (mappedBy = "typeBanque" ,cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = {"demande"})
+    @JsonIgnore
     private  List<Demande> demande;
    
 }

@@ -67,7 +67,7 @@ public class Admin {
     // Liaison  banque à admin 
     @OneToOne 
     @JoinColumn(name = "idBanque")
-    @JsonIgnore
+    // @JsonIgnore
     private Banque banque;
     
 }

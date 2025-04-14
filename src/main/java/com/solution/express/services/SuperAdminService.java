@@ -32,8 +32,6 @@ public class SuperAdminService {
                 return new ResponseEntity<>("Super Admin existant.", HttpStatus.BAD_REQUEST);
          }
      
-        
-       
     }
 
     //Modifier super admin methode

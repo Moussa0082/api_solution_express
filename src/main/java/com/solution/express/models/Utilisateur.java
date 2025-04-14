@@ -2,6 +2,9 @@ package com.solution.express.models;
 
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,14 +28,14 @@ public class Utilisateur {
     @NotEmpty
     @Email
     @Size(max = 255)
-    @Column(unique = true)
+    
     // @Email(message = "Email incorrect !")
     private String email;
 
     @Column(nullable = false)
     private String motDePasse;
 
-    @Column(unique = true)
+    
     private String image;
 
      //pour recuperr la liste des alertes d'un utlisateur specifique
@@ -45,12 +48,14 @@ public class Utilisateur {
     @OneToMany
     (mappedBy="utilisateur", cascade =  CascadeType.ALL)
     // @JsonIgnoreProperties(value = {"utiliateur"})
+    @JsonIgnore
     private  List<Demande> demande;
     
     // //Liaison le paiement à l'utilisateur pour voir la liste des paiements effectuer par le user
      @OneToMany
      (mappedBy="utilisateur", cascade =  CascadeType.ALL)
      // @JsonIgnoreProperties(value = {"utiliateur"})
+     @JsonIgnore
      private  List<Paiement> paiement;
 
     // //Liaison cotisation aux user

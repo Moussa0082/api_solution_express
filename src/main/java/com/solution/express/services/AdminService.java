@@ -40,7 +40,8 @@ public class AdminService {
     
             // Traitement du fichier image
             if (imageFile != null) {
-                String imageLocation = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                // String imageLocation = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                String imageLocation = "C:\\xampp\\htdocs\\solution_express";
                 try {
                     Path imageRootLocation = Paths.get(imageLocation);
                     if (!Files.exists(imageRootLocation)) {
@@ -50,7 +51,7 @@ public class AdminService {
                     String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                     Path imagePath = imageRootLocation.resolve(imageName);
                     Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-                    admin.setImage("http://localhost/solution/" + imageName);
+                    admin.setImage("solution/" + imageName);
                 } catch (IOException e) {
                     throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
                 }

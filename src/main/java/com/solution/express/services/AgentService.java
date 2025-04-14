@@ -52,7 +52,7 @@ public class AgentService {
                     String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                     Path imagePath = imageRootLocation.resolve(imageName);
                     Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-                    agent.setImage("http://localhost/solution_express\\images" + imageName);
+                    agent.setImage("solution_express/" + imageName);
                 } catch (IOException e) {
                     throw new Exception("Erreur lors du traitement du fichier image : " + e.getMessage());
                 }
@@ -86,14 +86,14 @@ public class AgentService {
 
             // Mettre à jour l'image si fournie
             if (imageFile != null) {
-                // String emplacementImage = "C:\\xampp\\htdocs\\solution_express";
-                String emplacementImage = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
+                String emplacementImage = "C:\\xampp\\htdocs\\solution_express";
+                // String emplacementImage = "C:\\Users\\bane.moussa\\Documents\\api_solution_express";
                 String nomImage = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                 Path cheminImage = Paths.get(emplacementImage).resolve(nomImage);
 
                 Files.copy(imageFile.getInputStream(), cheminImage, StandardCopyOption.REPLACE_EXISTING);
                 // adminExistant.setImage("http://localhost/solution_express\\images" + nomImage);
-                agent.setImage("http://localhost/solution/" + nomImage);
+                agent.setImage("solution/" + nomImage);
             }
 
             // Enregistrer le user mise à jour

@@ -99,5 +99,11 @@ public class UtilisateurController {
         return utilisateurService.deleteUtilisateur(id);
     }
 
+    @PostMapping("/login")
+    @Operation(summary = "Connexion d'un utilisateur")
+    public Object connexion(@RequestParam("email") String email,
+                            @RequestParam("motDePasse") String motDePasse) {
+        return utilisateurService.connectionUtilisateur(email, motDePasse);
+    }
     
 }
