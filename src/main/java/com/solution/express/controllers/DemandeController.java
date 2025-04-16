@@ -37,6 +37,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/demandes")
 @CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "http://localhost:4200")
 public class DemandeController {
 
 
@@ -56,7 +57,7 @@ public class DemandeController {
      private AdminRepository adminRepository;
 
     //Valider demande
-     @PostMapping("/valider/{demandeId}/{agentId}")
+     @PutMapping("/valider/{demandeId}/{agentId}")
     public ResponseEntity<Demande> validateDemande(
             @PathVariable Integer demandeId,
             @PathVariable  Integer agentId
@@ -116,7 +117,7 @@ public ResponseEntity<Demande> createDemande(
  ///////////////
 
 
- @PostMapping("/{demandeId}/assign/{agentId}")
+ @PutMapping("/{demandeId}/assign/{agentId}")
  public Demande assignDemandeToAgent(
      @PathVariable("demandeId") int demandeId,
      @PathVariable("agentId") int agentId
@@ -153,10 +154,17 @@ public ResponseEntity<Demande> createDemande(
 
 
    //Liste des demandes
+    // @GetMapping("/read")
+    // public ResponseEntity<List<Demande>> getAllDemande() {
+    //     return demandeService.getAllDemande();
+    // }
     @GetMapping("/read")
-    public ResponseEntity<List<Demande>> getAllDemande() {
-        return demandeService.getAllDemande();
-    }
+public ResponseEntity<List<Demande>> getAllDemande() {
+    List<Demande> demandes = demandeRepository.findAll();
+    System.out.println("Nombre de demandes: " + demandes.size());
+    return new ResponseEntity<>(demandes, HttpStatus.OK);
+}
+
 
        
     //Lire un user spécifique

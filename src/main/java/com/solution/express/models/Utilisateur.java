@@ -3,7 +3,9 @@ package com.solution.express.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -13,6 +15,10 @@ import lombok.Data;
 
 @Entity
 @Data
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "idUtilisateur"
+)
 public class Utilisateur {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

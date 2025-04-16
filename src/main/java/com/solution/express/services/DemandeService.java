@@ -153,7 +153,8 @@ public class DemandeService {
         // Set the user's information to the demande's user fields
         demande.setUtilisateur(user);
         demande.setAdmin(typeBanque.getBanque().getAdmin());
-        demande.setStatutDemande("en cours");
+        demande.setStatutDemande("reçu");
+        // demande.setStatutDemande("en cours");
 
         
         String dateDemande;
@@ -217,13 +218,14 @@ public class DemandeService {
     if (demande != null && agent != null) {
         // Assigner la demande à l'agent
         demande.setAgentCharger(agent);
+        demande.setStatutDemande(" en cours");
         Demande savedDemande = demandeRepository.save(demande);
 
         // Envoyer un e-mail à l'agent attribué
         String messageToAssignedAgent = "Mr "+ savedDemande.getAgentCharger().getPrenom().toUpperCase() + " "+ savedDemande.getAgentCharger().getNom().toUpperCase() + " Vous avez été chargé de traiter la demande de l'utilisateur " +
                 savedDemande.getUtilisateur().getPrenom() + " " + savedDemande.getUtilisateur().getNom()+" pour une demande de " + savedDemande.getTypeBanque().getNom()  + ". Veuillez agir dans les plus brefs délais.";
       Alerte al = new Alerte(savedDemande.getAgentCharger().getEmail(),"Nouvelle demande attribuée", messageToAssignedAgent, dateDemande);
-        emailService.sendSimpleMail(al);
+        // emailService.sendSimpleMail(al);
 
         // Récupérer tous les agents de la banque
         List<Agent> allAgents = agentRepository.findAllByBanque(agent.getBanque());
@@ -235,7 +237,7 @@ public class DemandeService {
                         "Une nouvelle demande a été attribuée à l'agent " + agent.getPrenom().toUpperCase() + " " + agent.getNom().toUpperCase() +
                         "Veuillez noter que vous n'êtes pas responsable de cette demande.";
                         Alerte alAuxAutresAgent = new Alerte(otherAgent.getEmail(), "Nouvelle demande attribuée", messageToOtherAgents,dateDemande);
-                emailService.sendSimpleMail(alAuxAutresAgent);
+                // emailService.sendSimpleMail(alAuxAutresAgent);
             }
         }
 

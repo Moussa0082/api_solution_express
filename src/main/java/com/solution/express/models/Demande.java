@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -27,6 +29,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "idDemande"
+)
 public class Demande {
 
     // @JsonIgnoreProperties({"agent", "utilisateur"})
@@ -34,11 +40,11 @@ public class Demande {
     @Id
     private int idDemande;
 
-    @Temporal(TemporalType.DATE)
+    // @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
     private String dateDemande;
 
-    @Temporal(TemporalType.DATE)
+    // @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
     private String HeureDemande;
 
@@ -89,6 +95,7 @@ public class Demande {
     // //Liaison agent à la demande pour voir l'agent qui s'occuper de la demande
     @ManyToMany
     @JoinColumn(name = "idAgent")
+    @JsonIgnoreProperties("demande")
     // @JsonIgnore
     // (mappedBy = "idAgent", cascade = CascadeType.ALL)
     private List<Agent> agent;
@@ -96,10 +103,12 @@ public class Demande {
     // //Lier l'id de l'utilisateur à la demande pour voir l'utilisateur qui a effectué la demande
     @ManyToOne
     // @JsonIgnore
+    @JsonIgnoreProperties("demande") // si utilisateur contient liste de demandes
     private Utilisateur utilisateur;
 
     @ManyToOne
     // @JsonIgnore
+    @JsonIgnoreProperties("demande") // si agent contient liste de demandes
     private Agent agentCharger;
 
 }

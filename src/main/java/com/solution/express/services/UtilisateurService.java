@@ -36,7 +36,8 @@ public class UtilisateurService {
     
             // Traitement du fichier image
             if (imageFile != null) {
-                String imageLocation = "C:\\xampp\\htdocs\\solution_express";
+                String imageLocation = "/Applications/XAMPP/xamppfiles/htdocs/solution_express";
+
                 try {
                     Path imageRootLocation = Paths.get(imageLocation);
                     if (!Files.exists(imageRootLocation)) {

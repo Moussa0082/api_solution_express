@@ -40,7 +40,8 @@ public class BanqueService {
             // Traitement du fichier image
             if (imageFile != null) {
                 // String imageLocation = "C:\\Users\\bane8\\OneDrive\\Bureau\\Express Solution\\api_solution_express";
-                String imageLocation = "C:\\xampp\\htdocs\\solution_express";
+                String imageLocation = "/Applications/XAMPP/xamppfiles/htdocs/solution_express";
+                // String imageLocation = "C:\\xampp\\htdocs\\solution_express";
                 try {
                     Path imageRootLocation = Paths.get(imageLocation);
                     if (!Files.exists(imageRootLocation)) {
